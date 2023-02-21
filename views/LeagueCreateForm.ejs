@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Document</title>
+</head>
+<body class="flex-body">
+    <div class="log-header-box">
+        <div class="left-header">
+          <a href="/" class="header-logo">F1 Bets</a>
+        </div>
+        <div class="right-header">
+            .
+        </div>
+    </div>
+    <div class="header-div-bar">
+        <p class="bar-text" >Create League</p>
+    </div>
+    <div class="register-form-box">
+        <div class="form-header">
+            <h1>Create League</h1>
+        </div>
+        <div>
+            <form class="form" action="/Leagues/CreateLeague" method="POST">
+                <label for="LeagueName">League Name</label>
+                <input type="text" name="LeagueName" placeholder="League Name" minlength="1" max="40" required>
+                <label for="LeaguePassword">League Password</label>
+                <input type="password" name="LeaguePassword" placeholder="Password" minlength="8" maxlength="20" required>
+                <button type="submit" class="header-btn register-btn">Create League</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

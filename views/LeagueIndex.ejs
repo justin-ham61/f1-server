@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>My Leagues</title>
+    <script>
+        function leaguePage(leagueId, leagueName){
+            fetch('/Leagues/LeagueInfo', {
+            method: 'POST',
+            body: JSON.stringify({ leagueId, leagueName }),
+            headers: { 'Content-Type': 'application/json' }
+            })
+            .then((response) => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            }).catch(function(err) {
+            console.info(err + " url: " + url);
+            });
+        }
+    </script>
+</head>
+<body>
+  <div class="header-box">
+    <div class="left-header">
+      <a class="header-logo" href="/">F1 Bets</a>
+    </div>
+    <% if (!isAuth) { %> 
+        <div class="right-header">
+          <form action="/login">
+            <button class="sign-in header-btn" type="submit">SIGN IN</button>
+          </form> 
+          <form action="/registration">
+            <button class="register header-btn" type="submit">REGISTER</button>
+          </form>
+        </div>
+      <% } %>
+      <% if (isAuth) { %> 
+        <div class="right-header">
+          <form action="/account" method="GET">
+            <button class="sign-in header-btn" type="submit">ACCOUNT</button>
+          </form>
+          <form action="/logout" method="POST">
+            <button class="register header-btn" type="submit">SIGN OUT</button>
+          </form> 
+        </div>
+      <% } %> 
+  </div>
+  <div class="tabs-bar">
+    <div class="tabs">
+      <a class='tab-head' id='popular' href="/bets"> PLACEMENT </a> 
+      <a class='tab-head' id='trending'> TRENDING </a>
+      <a class='tab-head' id='new' > RESULTS </a>
+      <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
+    </div>
+  </div>
+  <div class="league-bar">
+    <form action="/LeagueCreateForm" method="GET">
+        <button class="league-btn">Create League</button>
+    </form>
+    <form action="/Leagues/JoinLeague" method="POST">
+        <input type="text" name="leagueSearch">
+        <button class="league-btn">Search Leagues</button>
+    </form>
+    </div>
+    <div class="index-box">
+        <div class="league-list">
+        <% if (leagues.length > 0) {  %> 
+            <% for (let i = 0; i < leagues.length; i++) { %> 
+            <button class="league-box" onclick="leaguePage(`<%- leagues[i].league_id %>`,`<%- leagues[i].LeagueName %>`)"> <%- leagues[i].LeagueName %> </button>
+            <% } %> 
+        <% } %> 
+        </div>
+    </div>
+</body>
+</html>

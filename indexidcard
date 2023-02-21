@@ -1,0 +1,23 @@
+<% if (isAuth) { %> 
+  <div class="landing-page-body">
+    <div class="id-badge">
+      <div class="hole"></div>
+      <div class="badge-words">
+        <p>Name Goes Here</p>
+        <p>Job Goes Here</p>
+        <p>Clearance Level: 4</p>
+      </div>
+      <img src="/images/README.jpeg" alt="redbulll logo" width="300px" height="170px">
+    </div>
+  <div>
+      <div class='account-box'>
+        <h1>Red Bull Racing</h1>
+        <table>
+          <tr>
+            <td>Balance: </td>
+            <td>$683,920,472</td>
+          </tr>
+        </table>
+      </div>
+  </div>
+  <% } %> 
