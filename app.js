@@ -52,15 +52,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/registration', (req, res) => {
-    res.render('registration');
+    res.render('Registration');
 })
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('Login');
 })
 
 app.get('/account', isAuth, (req, res) => {
-    res.render('account');
+    res.render('Account');
 })
 
 app.get('/leagues', isAuth, async (req, res) => {
