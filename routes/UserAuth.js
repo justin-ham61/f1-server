@@ -34,7 +34,7 @@ router.post('/registerUser', async (req, res) => {
     }
 
     if (err.email == 1 || err.password == 1){
-        res.redirect('/register');
+        res.redirect('/registration');
     } else {
         bcrypt.hash(password, 10, function(err, hash){
             if (err){
