@@ -173,7 +173,7 @@ app.post('/logout', (req,res) => {
     })
 })
 
-app.listen(8002, () => {
+app.listen(8080, () => {
     console.log("server is running on port 8000");
 })
 
