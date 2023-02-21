@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 
 
 const options = {
-    host: 'localhost',
+    host: '54.71.40.98',
     user: 'root',
     password: 'Blue4524.',
     database: 'f1'
@@ -173,7 +173,7 @@ app.post('/logout', (req,res) => {
     })
 })
 
-app.listen(8000, () => {
+app.listen(8002, () => {
     console.log("server is running on port 8000");
 })
 

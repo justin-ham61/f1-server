@@ -21,3 +21,7 @@
       </div>
   </div>
   <% } %> 
+
+  scp -i "~/downloads/blue4524.cer" f1.sql ec2-user@ec2-54-71-40-98.us-west-2.compute.amazonaws.com:~/
+
+  

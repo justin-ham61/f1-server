@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 
 
 let db = mysql.createConnection({
-    host: 'localhost',
+    host: '554.71.40.98',
     user: 'root',
     password: 'Blue4524.',
     database: 'f1'
