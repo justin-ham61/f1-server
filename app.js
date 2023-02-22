@@ -178,7 +178,23 @@ app.get('/qualification', isAuth, async (req, res) => {
     result.forEach(element => {
         placedBets.push(element.bet_id)
     })
-    res.render('Bets', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
+    res.render('Qualification', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
+})
+
+app.get('/5050', isAuth, async (req, res) => {
+    let bets = await getBets();
+    let userBets = await getUserBets(req.session.user_id)
+    let userData = await getUserData(req.session.user_id)
+    let result = userBets.filter((element1) => {
+        return bets.some((element2) => {
+            return element1.bet_id === element2.bet_id; // return the ones with equal id
+       });
+    });
+    let placedBets =[];
+    result.forEach(element => {
+        placedBets.push(element.bet_id)
+    })
+    res.render('5050', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
 app.get('/admin', (req, res) => {

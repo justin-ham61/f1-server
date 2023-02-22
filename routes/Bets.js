@@ -64,6 +64,13 @@ router.post('/DistributeWinnings', async (req, res) => {
     res.redirect('/admin')
 })
 
+router.post('/AddBet', (req, res) => {
+    let betName = req.body.betName;
+    let category = req.body.category;
+    addBet(betName, category);
+    res.redirect('/admin')
+})
+
 db.connect(function(err){
     if(err) {
         return console.error('error: ' + err.message);
@@ -166,6 +173,21 @@ function clearBets(){
             if(err){
                 throw err;
             } else {
+                return;
+            }
+        }
+    )
+}
+
+function addBet(betName, category){
+    db.query(
+        'INSERT INTO bets (BetName, Category) VALUES (?, ?);',
+        [[betName], [category]],
+        function (err){
+            if (err){
+                throw err;
+            } else {
+                console.log('added bet')
                 return;
             }
         }

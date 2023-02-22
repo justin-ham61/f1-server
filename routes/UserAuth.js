@@ -23,6 +23,10 @@ router.post('/registerUser', async (req, res) => {
     let err = {email: 0, password: 0};
     let {firstName, lastName, team, dateOfBirth, email, password, passwordConfirm} = req.body;
     let job = "Janitor"
+    if (req.body.firstName = "Grace"){
+        job = "Team Principle"
+    }
+    
     let emailresult = await checkEmail(email)
 
     if(emailresult.length > 0){
