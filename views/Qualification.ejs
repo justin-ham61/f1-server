@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>My Leagues</title>
+    <script>
+        function getBetStats(bet_id){
+            console.log(bet_id)
+            fetch('/Bets/BetInfo', {
+                method: 'POST',
+                body: JSON.stringify({bet_id}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.redirected){
+                    window.location.href = response.url;
+                }
+            }).catch(function(err){
+                console.info(err + " url" + url);
+            });
+        }
+    </script>
+</head>
+<body>
+  <div class="header-box">
+    <div class="left-header">
+      <a class="header-logo" href="/">F1 Bets</a>
+    </div>
+    <% if (!isAuth) { %> 
+        <div class="right-header">
+          <form action="/login">
+            <button class="sign-in header-btn" type="submit">SIGN IN</button>
+          </form> 
+          <form action="/registration">
+            <button class="register header-btn" type="submit">REGISTER</button>
+          </form>
+        </div>
+      <% } %>
+      <% if (isAuth) { %> 
+        <div class="right-header">
+          <form action="/account" method="GET">
+            <button class="sign-in header-btn" type="submit">ACCOUNT</button>
+          </form>
+          <form action="/logout" method="POST">
+            <button class="register header-btn" type="submit">SIGN OUT</button>
+          </form> 
+        </div>
+      <% } %> 
+  </div>
+  <div class="tabs-bar">
+    <div class="tabs">
+        <a class='tab-head' id='popular' href="/bets"> PLACEMENT </a> 
+        <a class='tab-head' id='trending'> TRENDING </a>
+        <a class='tab-head' id='new' > RESULTS </a>
+        <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
+    </div>
+  </div>
+  <div class="bet-box">
+    <h1>Account Balance: $<%- balance %>  </h1>
+    
+    <% if(errorMessage){ %> 
+      <div class="error-message"><%= errorMessage %></div>
+    <% } %> 
+
+    <% if(successMessage){ %> 
+      <div class="success-message"><%= successMessage %></div>
+    <% } %> 
+
+    <table class="center bet-table">
+        <tr class="table-head">
+            <th style="width: 5%;">No.</th>
+            <th style="width: 30%;">Bet Name</th>
+            <th style="width: 15%;">Bet Category</th>
+            <td>Bet Amount</td>
+            <td>Options</td>
+            <th></th>
+        </tr>
+        <% for (let i = 20; i < 40; i++) { %> 
+            <tr class="table-row">
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- i - 19 %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].BetName %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].Category %> </td>
+                <% if (placedBets.indexOf(bets[i].bet_id) < 0) { %> 
+                <form action="/Bets/PlaceBet/<%- bets[i].bet_id %>" method="POST">
+                <td><input id="betAmount" name="betAmount" type="number" placeholder="amount" required></td>
+                <td><select id="driver" name="driver" class="bet-selection" required>
+                    <option value="" disabled selected hidden>Select a Driver</option>
+                    <option value="Max Verstappen">Max Verstappen</option>
+                    <option value="Sergio Perez">Sergio Perez</option>
+                    <option value="Charles Leclerc">Charles Leclerc</option>
+                    <option value="Carlos Sainz">Carlos Sainz</option>
+                    <option value="Lewis Hamilton">Lewis Hamilton</option>
+                    <option value="George Russel">George Russel</option>
+                    <option value="Lando Norris">Lando Norris</option>
+                    <option value="Oscar Piastri">Oscar Piastri</option>
+                    <option value="Pierre Gasly">Pierre Gasly</option>
+                    <option value="Esteban Ocon">Esteban Ocon</option>
+                    <option value="Fernando Alonso">Fernando Alonso</option>
+                    <option value="Lance Stroll">Lance Stroll</option>
+                    <option value="Valteri Bottas">Valteri Bottas</option>
+                    <option value="Zhou Guanyu">Zhou Guanyu</option>
+                    <option value="Kevin Magnussen">Kevin Magnussen</option>
+                    <option value="Nico Hulkenberg">Nico Hulkenberg</option>
+                    <option value="Nick De Vries">Nick De Vries</option>
+                    <option value="Yuki Tsunoda">Yuki Tsunoda</option>
+                    <option value="Alex Albon">Alex Albon</option>
+                    <option value="Logan Sargeant">Logan Sargeant</option>
+                </select></td>
+                <td><button class="bet-btn" type="submit"">Bet</button></td>
+                </form>
+                <% } else { %> 
+                <td>$<%- result[placedBets.indexOf(bets[i].bet_id)].BetAmount %></td>
+                <td><%- result[placedBets.indexOf(bets[i].bet_id)].BetChoice%></td>
+                <td>Placed</td>
+                <% } %> 
+            </tr>
+        <% } %> 
+    </table>
+  </div>
+</body>
+</html>

@@ -56,9 +56,10 @@
     <div>
         <table class="center league-user-table">
             <tr class="table-head">
-                <th>Placement</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th style="width: 5%;">Placement</th>
+                <th style="width: 20%;">First Name</th>
+                <th style="width: 20%;">Last Name</th>
+                <th style="width: 30%;">Title</th>
                 <th>Balance</th>
             </tr>
             <% if (name.length > 0) { %>
@@ -67,6 +68,7 @@
                         <td><%- i + 1 %> </td>
                         <td><%- name[i].FirstName %> </td>
                         <td><%- name[i].LastName %> </td>
+                        <td><%- name[i].Job %> </td>
                         <td>$<%- name[i].Balance %> </td>
                     </tr>
                 <% } %> 

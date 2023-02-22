@@ -58,7 +58,7 @@ router.post('/JoinLeague', async (req, res) => {
 function getLeagueMembers(leagueId){
     return new Promise ((resolve, reject) => {
         db.query(
-            'SELECT FirstName, LastName, Balance FROM users INNER JOIN userleagues ON users.user_id = userleagues.user_id WHERE league_id = ?;',
+            'SELECT FirstName, LastName, Balance, Job FROM users INNER JOIN userleagues ON users.user_id = userleagues.user_id WHERE league_id = ?;',
             leagueId,
             function(err, result){
                 if (err){

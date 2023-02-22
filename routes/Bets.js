@@ -57,6 +57,7 @@ router.post('/DistributeWinnings', async (req, res) => {
             let distributionPercent = (element.BetAmount/correctBetPool);
             let amountGain = (distributionPercent * totalPool);
             updateUserBalance(element.user_id, amountGain);
+            clearBets();
             console.log(amountGain)
         }
     })
@@ -152,6 +153,19 @@ function updateUserBalance(user_id, amountGain){
                 throw err;
             } else {
                 console.log('successfully updated Balance')
+                return;
+            }
+        }
+    )
+}
+
+function clearBets(){
+    db.query(
+        'TRUNCATE userbets;',
+        function(err){
+            if(err){
+                throw err;
+            } else {
                 return;
             }
         }
