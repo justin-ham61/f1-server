@@ -6,8 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>My Leagues</title>
+    <script>
+      function getIdColor(team){
+        const badge = document.getElementById('badge')
+        const color = {
+          "redbull": "navy",
+          "ferrari": "red",
+          "mercedes": "lightgray",
+          "mclaren": "orange",
+          "alpine": "skyblue",
+          "aston": "green",
+          "haas": "black",
+          "williams": "blue",
+          "alpha": "darkblue",
+          "alfa": "darkred"
+        }
+        badge.style.cssText = `background: linear-gradient( ${color[`${team}`]} 60%, transparent 40%)`
+      }
+    </script>
 </head>
-<body>
+<% if (isAuth) { %>
+  <body onload="getIdColor(`<%- user[0].Team %>`);">
+<% } else { %>  
+  <body>
+<% } %> 
   <div class="header-box">
     <div class="left-header">
       <a class="header-logo" href="/">F1 Bets</a>
@@ -56,5 +78,19 @@
     <div class="number-box">3</div>
     <div>SECONDS</div>
   </div>
+  <% if (isAuth) { %> 
+    <div class="landing-page-body">
+      <div class="id-badge" id="badge" style='background: linear-gradient( navy 60%, transparent 40%);'>
+        <div class="hole"></div>
+        <div class="badge-words">
+          <p style="font-size: 30px; font-weight: bold;"><%- user[0].FirstName %> <%- user[0].LastName %></p>
+          <p style="font-weight: bold;"><%- user[0].Job %></p>
+          <p style="font-size: 20px;">Balance: $<%- user[0].Balance %> </p>
+          <p style="font-size: 20px;">Birth: <%- user[0].Birth  %> </p>
+        </div>
+          <img src="/images/<%- user[0].Team  %>.jpeg" alt="redbulll logo" width="300px" height="170px">
+      </div>
+    </div>
+  <% } %> 
 </body>
 </html>

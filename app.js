@@ -46,9 +46,13 @@ const isAuth = (req, res, next) => {
     }
 }
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     let isAuth = req.session.isAuth;
-    res.render('Index2', {isAuth : isAuth});
+    let user;
+    if (req.session.isAuth){
+        user = await getUserData(req.session.user_id)
+    }
+    res.render('Index2', {isAuth : isAuth, user : user});
 })
 
 app.get('/registration', (req, res) => {
@@ -158,12 +162,11 @@ app.get('/bets', isAuth, async (req,res) => {
         placedBets.push(element.bet_id)
     })
 
-    res.render('Bets', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, message : req.flash('error'), balance : userData[0].Balance})
+    res.render('Bets', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
-app.get('/sessiontest', (req, res) => {
-    console.log(req.session.firstName);
-    //res.sendFile(path.join(__dirname, 'build1', 'index.html'));
+app.get('/admin', (req, res) => {
+    res.render('Admin')
 })
 
 app.post('/logout', (req,res) => {

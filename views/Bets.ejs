@@ -82,9 +82,15 @@
   </div>
   <div class="bet-box">
     <h1>Account Balance: $<%- balance %>  </h1>
-    <% if(message){ %> 
-      <div class="error-message"><%= message %></div>
+    
+    <% if(errorMessage){ %> 
+      <div class="error-message"><%= errorMessage %></div>
     <% } %> 
+
+    <% if(successMessage){ %> 
+      <div class="success-message"><%= successMessage %></div>
+    <% } %> 
+
     <table class="center bet-table">
         <tr class="table-head">
             <th style="width: 5%;">No.</th>

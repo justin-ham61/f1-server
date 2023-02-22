@@ -22,7 +22,7 @@ router.post('/registerUser', async (req, res) => {
     let userdata = [];
     let err = {email: 0, password: 0};
     let {firstName, lastName, team, dateOfBirth, email, password, passwordConfirm} = req.body;
-
+    let job = "Janitor"
     let emailresult = await checkEmail(email)
 
     if(emailresult.length > 0){
@@ -40,9 +40,9 @@ router.post('/registerUser', async (req, res) => {
             if (err){
                 throw (err)
             } else {
-                let values = [firstName, lastName, team, dateOfBirth, email ,hash]
+                let values = [firstName, lastName, team, dateOfBirth, email ,hash, job]
                 db.query(
-                    'INSERT INTO users (FirstName, LastName, Team, Birth, Email, Hash) VALUES (?);',
+                    'INSERT INTO users (FirstName, LastName, Team, Birth, Email, Hash, Job) VALUES (?);',
                     [values],
                     function(err, result){
                         if (err){
