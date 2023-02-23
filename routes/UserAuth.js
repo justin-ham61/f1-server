@@ -26,7 +26,6 @@ router.post('/registerUser', async (req, res) => {
     if (req.body.firstName = "Grace"){
         job = "Team Principle"
     }
-    
     let emailresult = await checkEmail(email)
 
     if(emailresult.length > 0){

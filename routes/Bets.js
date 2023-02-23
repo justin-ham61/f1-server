@@ -14,10 +14,10 @@ let db = mysql.createConnection({
 });
 
 router.post('/BetInfo', async (req, res) => {
-    res.redirect(`/BetInfo/${req.body.bet_id}`)
+    res.redirect(`/BetInfo/${req.body.betCategory}/${req.body.bet_id}`)
 })
 
-router.post('/PlaceBet/:bet_id', async (req, res) => {
+router.post('/PlaceBet/:bet_id/:betCategory', async (req, res) => {
     //check if user already bet on this bet
     let betCheck = await checkUserBet(req.params.bet_id, req.session.user_id)
     if (betCheck.length > 0){
@@ -37,14 +37,8 @@ router.post('/PlaceBet/:bet_id', async (req, res) => {
         }
         
     }
-    if (req.params.bet_id <= 23){
-        res.redirect('/bets')
-    } else if (req.params.bet_id >= 24 && req.params.bet_id <= 43){
-        res.redirect('/qualification')
-    } else if (req.params.bet_id >= 44){
-        res.redirect('/5050')
-    }
-    
+    res.redirect(`/bets/${req.params.betCategory}`)
+
 })
  
 router.post('/DistributeWinnings', async (req, res) => {

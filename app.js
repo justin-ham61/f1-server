@@ -84,11 +84,11 @@ app.get('/leagues/:leagueName', isAuth, async (req, res) => {
     res.render('LeagueOverview', { name : name, isAuth : isAuth, leagueName : leagueName })
 })
 
-app.get('/BetInfo/:bet_id', isAuth, async (req,res) => {
+app.get('/BetInfo/:betCategory/:bet_id', isAuth, async (req,res) => {
     let bet_id = req.params.bet_id;
     let totalBets = 0; 
     let betAmount = 0;
-    let betCategory = "none";
+    let betCategory = req.params.betCategory
     let drivers = {
         "Max Verstappen": 0,
         "Sergio Perez": 0,
@@ -141,27 +141,46 @@ app.get('/BetInfo/:bet_id', isAuth, async (req,res) => {
         "Yes": 0,
         "No": 0
     }
+    let pitstops = {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0
+    }
+    let pitstopsAmount = {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0
+    }
     let stats = await getBetStats(bet_id);
     if (stats.length > 0){
-        if (bet_id >= 3 && bet_id <= 43){
+        if (betCategory == "Placement" || betCategory == "Qualification"){
+            betCategory = "drivers"
             stats.forEach((bet) => {
-                betCategory = "drivers"
                 let key = bet.BetChoice;
                 totalBets += 1; 
                 drivers[key] += 1;
                 amount[key] += bet.BetAmount;
                 betAmount += bet.BetAmount;
-                console.log(betCategory)
             })
-        } else if (bet_id > 43) {
+        } else if (betCategory == "5050") {
+            betCategory = "yesno"
             stats.forEach((bet) => {
-                betCategory = "yesno"
                 let key = bet.BetChoice;
                 totalBets += 1;
                 yesno[key] += 1;
                 yesnoAmount[key] += bet.BetAmount;
                 betAmount += bet.BetAmount
-                console.log(betCategory)
+            })
+        } else if (betCategory == "Pitstops") {
+            betCategory = "pitstops"
+            stats.forEach((bet) => {
+                let key = bet.BetChoice;
+                totalBets += 1;
+                pitstops[key] += 1;
+                pitstopsAmount[key] += bet.BetAmount;
+                betAmount += bet.BetAmount
             })
         }
     }
@@ -174,12 +193,14 @@ app.get('/BetInfo/:bet_id', isAuth, async (req,res) => {
         betAmount : betAmount,
         yesno : yesno,
         yesnoAmount : yesnoAmount,
-        betCategory : betCategory
+        betCategory : betCategory,
+        pitstops : pitstops,
+        pitstopsAmount : pitstopsAmount
     })
 })
 
-app.get('/bets', isAuth, async (req,res) => {
-    let betCategory = "Placement"
+app.get('/bets/:betCategory', isAuth, async (req,res) => {
+    let betCategory = req.params.betCategory
     let bets = await getBets(betCategory);
     let userBets = await getUserBets(req.session.user_id)
     let userData = await getUserData(req.session.user_id)
@@ -192,62 +213,14 @@ app.get('/bets', isAuth, async (req,res) => {
     result.forEach(element => {
         placedBets.push(element.bet_id)
     })
-    res.render('Bets', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
-})
-
-app.get('/qualification', isAuth, async (req, res) => {
-    let betCategory = "Qualification"
-    let bets = await getBets(betCategory);
-    let userBets = await getUserBets(req.session.user_id)
-    let userData = await getUserData(req.session.user_id)
-    let result = userBets.filter((element1) => {
-        return bets.some((element2) => {
-            return element1.bet_id === element2.bet_id; // return the ones with equal id
-       });
-    });
-    let placedBets =[];
-    result.forEach(element => {
-        placedBets.push(element.bet_id)
-    })
-    res.render('Qualification', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
-})
-
-app.get('/5050', isAuth, async (req, res) => {
-    let betCategory = "5050"
-    let bets = await getBets(betCategory);
-    let userBets = await getUserBets(req.session.user_id)
-    let userData = await getUserData(req.session.user_id)
-    let result = userBets.filter((element1) => {
-        return bets.some((element2) => {
-            return element1.bet_id === element2.bet_id; // return the ones with equal id
-       });
-    });
-    let placedBets =[];
-    result.forEach(element => {
-        placedBets.push(element.bet_id)
-    })
-    res.render('5050', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
-})
-
-app.get('/pitstops', isAuth, async (req,res) => {
-    let betCategory = "Pitstops"
-    let bets = await getBets(betCategory);
-    let userBets = await getUserBets(req.session.user_id)
-    let userData = await getUserData(req.session.user_id)
-    let result = userBets.filter((element1) => {
-        return bets.some((element2) => {
-            return element1.bet_id === element2.bet_id; // return the ones with equal id
-       });
-    });
-    let placedBets =[];
-    result.forEach(element => {
-        placedBets.push(element.bet_id)
-    })
-    res.render('Pitstops', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
+    res.render(`${betCategory}`, {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
 app.get('/admin', (req, res) => {
     res.render('Admin')
+})
+app.get('/apitest', (req, res) => {
+    res.render('apitest')
 })
 
 app.post('/logout', (req,res) => {

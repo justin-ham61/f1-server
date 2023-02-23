@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api Test</title>
+    <script>
+        function fetchRaceResult(){
+            console.log('clicked')
+            fetch("https://ergast.com/api/f1/2022/1/results.json", {
+                method: "GET",
+            })
+            .then((response) => response.json())
+            .then((data) => createResultArray(data))
+        }
+
+        function fetchPitStops(){
+            fetch("http://ergast.com/api/f1/2022/1/pitstops.json", {
+                method: "GET"
+            })
+            .then((response) => response.json())
+            .then((data) => createPitStopArray(data))
+        }
+
+        function createResultArray(data){
+            let driverArray = []
+            let raceResults = data.MRData.RaceTable.Races[0].Results;
+            raceResults.forEach((result) => {
+                let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
+                driverArray.push(driverFullName);
+            });
+            console.log(driverArray)
+        }
+
+        function createPitStopArray(data){
+            let pitstopArray = {
+                "hamilton": 0,
+                "alonso": 0,
+                "mick_schumacher": 0,
+                "albon": 0,
+                "max_verstappen": 0,
+                "sainz": 0,
+                "kevin_magnussen": 0,
+                "gasly": 0,
+                "ocon": 0,
+                "bottas": 0,
+                "latifi": 0,
+                "leclerc": 0,
+                "perez": 0,
+                "russell": 0,
+                "tsunoda": 0,
+                "zhou": 0,
+                "ricciardo": 0,
+                "stroll": 0,
+                "norris": 0,
+                "hulkenberg": 0
+            };
+            let pitStops = data.MRData.RaceTable.Races[0].PitStops;
+            pitStops.forEach((driver) => {
+                let key = driver.driverId;
+                pitstopArray[key] = driver.stop;
+            })
+            console.log(pitstopArray)
+        }
+        function random(){
+            let number = Math.random();
+            console.log(number)
+        }
+    </script>
+</head>
+<body>
+    <button onclick="fetchRaceResult();">fetch race results</button>    
+    <button onclick="fetchPitStops();">fetch pit stop</button>
+    <button onclick="random();">random</button>
+</body>
+</html>

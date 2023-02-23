@@ -23,10 +23,31 @@
         }
         badge.style.cssText = `background: linear-gradient( ${color[`${team}`]} 60%, transparent 40%)`
       }
+      function timeFunction(){
+        console.log("hello")
+        const interval = setInterval(function() {
+            const day = document.getElementById('day')
+            const hour = document.getElementById('hour')
+            const minute = document.getElementById('minute')
+            const second = document.getElementById('second')
+            var countDownDate = new Date("Mar 5, 2023 00:00:00").getTime();
+            var now = new Date().getTime();
+            var timeleft = countDownDate - now;
+            var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+
+            document.getElementById("day").innerHTML = days
+            document.getElementById("hour").innerHTML = hours
+            document.getElementById("minute").innerHTML = minutes
+            document.getElementById("second").innerHTML = seconds
+            }, 1000);
+      }
     </script>
 </head>
 <% if (isAuth) { %>
-  <body onload="getIdColor(`<%- user[0].Team %>`);">
+  <body onload="getIdColor(`<%- user[0].Team %>`); timeFunction();">
 <% } else { %>  
   <body>
 <% } %> 
@@ -57,26 +78,22 @@
   </div>
   <div class="tabs-bar">
     <div class="tabs">
-      <a class='tab-head' id='popular' href="/bets"> PLACEMENT </a> 
-      <a class='tab-head' id='trending' href="/qualification" > QUALIFICATION </a>
-      <a class='tab-head' id='new' href="/5050"> YES/NO </a>
-      <a class="tab-head" id="pitstop" href="/pitstops">PIT STOPS</a>
+      <a class='tab-head' id='popular' href="/bets/Placement"> PLACEMENT </a> 
+      <a class='tab-head' id='trending' href="/bets/Qualification" > QUALIFICATION </a>
+      <a class='tab-head' id='new' href="/bets/5050"> YES/NO </a>
+      <a class="tab-head" id="pitstop" href="/bets/Pitstops">PIT STOPS</a>
       <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
     </div>
   </div>
   <div class="countdown-bar">
     <p>Time Until Race Bet Lock In: </p>
-    <div class="number-box">1</div>
-    <div class="number-box">3</div>
+      <div class="number-box" id="day">1</div>
     <div>DAYS</div>
-    <div class="number-box">0</div>
-    <div class="number-box">5</div>
+      <div class="number-box" id="hour">0</div>
     <div>HOURS</div>
-    <div class="number-box">1</div>
-    <div class="number-box">3</div>
+      <div class="number-box" id="minute">1</div>
     <div>MINUTES</div>
-    <div class="number-box">5</div>
-    <div class="number-box">3</div>
+      <div class="number-box" id="second">5</div>
     <div>SECONDS</div>
   </div>
   <% if (isAuth) { %> 

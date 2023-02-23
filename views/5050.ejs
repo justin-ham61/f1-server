@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
     <title>My Leagues</title>
     <script>
-        function getBetStats(bet_id){
+        function getBetStats(bet_id, betCategory){
             console.log(bet_id)
+            console.log(betCategory)
             fetch('/Bets/BetInfo', {
                 method: 'POST',
-                body: JSON.stringify({bet_id}),
+                body: JSON.stringify({bet_id, betCategory}),
                 headers: {'Content-Type': 'application/json'}
             })
             .then((response) => {
@@ -52,11 +53,11 @@
   </div>
   <div class="tabs-bar">
     <div class="tabs">
-        <a class='tab-head' id='popular' href="/bets"> PLACEMENT </a> 
-        <a class='tab-head' id='trending' href="/qualification" > QUALIFICATION </a>
-        <a class='tab-head' id='new' href="/5050"> YES/NO </a>
-        <a class="tab-head" id="pitstop" href="/pitstops">PIT STOPS</a>
-        <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
+      <a class='tab-head' id='popular' href="/bets/Placement"> PLACEMENT </a> 
+      <a class='tab-head' id='trending' href="/bets/Qualification" > QUALIFICATION </a>
+      <a class='tab-head' id='new' href="/bets/5050"> YES/NO </a>
+      <a class="tab-head" id="pitstop" href="/bets/Pitstops">PIT STOPS</a>
+      <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
     </div>
   </div>
   <div class="bet-box">
@@ -81,11 +82,11 @@
         </tr>
         <% for (let i = 0; i < bets.length; i++) { %> 
             <tr class="table-row">
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- i + 1 %> </td>
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].BetName %> </td>
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].Category %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- i + 1 %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].BetName %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].Category %> </td>
                 <% if (placedBets.indexOf(bets[i].bet_id) < 0) { %> 
-                <form action="/Bets/PlaceBet/<%- bets[i].bet_id %>" method="POST">
+                <form action="/Bets/PlaceBet/<%- bets[i].bet_id%>/<%- bets[i].Category %>" method="POST">
                 <td><input id="betAmount" name="betAmount" type="number" placeholder="amount" required></td>
                 <td><select id="driver" name="driver" class="bet-selection" required>
                     <option value="" disabled selected hidden>Select Option</option>
