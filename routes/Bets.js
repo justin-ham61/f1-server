@@ -37,7 +37,14 @@ router.post('/PlaceBet/:bet_id', async (req, res) => {
         }
         
     }
-    res.redirect('/bets')
+    if (req.params.bet_id <= 23){
+        res.redirect('/bets')
+    } else if (req.params.bet_id >= 24 && req.params.bet_id <= 43){
+        res.redirect('/qualification')
+    } else if (req.params.bet_id >= 44){
+        res.redirect('/5050')
+    }
+    
 })
  
 router.post('/DistributeWinnings', async (req, res) => {

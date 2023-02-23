@@ -88,6 +88,7 @@ app.get('/BetInfo/:bet_id', isAuth, async (req,res) => {
     let bet_id = req.params.bet_id;
     let totalBets = 0; 
     let betAmount = 0;
+    let betCategory = "none";
     let drivers = {
         "Max Verstappen": 0,
         "Sergio Perez": 0,
@@ -132,23 +133,54 @@ app.get('/BetInfo/:bet_id', isAuth, async (req,res) => {
         "Alex Albon": 0,
         "Logan Sargeant": 0
     }
+    let yesno = {
+        "Yes": 0,
+        "No": 0
+    }
+    let yesnoAmount = {
+        "Yes": 0,
+        "No": 0
+    }
     let stats = await getBetStats(bet_id);
     if (stats.length > 0){
-        stats.forEach((bet) => {
-            let key = bet.BetChoice;
-            totalBets += 1; 
-            drivers[key] += 1;
-            amount[key] += bet.BetAmount;
-            betAmount += bet.BetAmount;
-        })
+        if (bet_id >= 3 && bet_id <= 43){
+            stats.forEach((bet) => {
+                betCategory = "drivers"
+                let key = bet.BetChoice;
+                totalBets += 1; 
+                drivers[key] += 1;
+                amount[key] += bet.BetAmount;
+                betAmount += bet.BetAmount;
+                console.log(betCategory)
+            })
+        } else if (bet_id > 43) {
+            stats.forEach((bet) => {
+                betCategory = "yesno"
+                let key = bet.BetChoice;
+                totalBets += 1;
+                yesno[key] += 1;
+                yesnoAmount[key] += bet.BetAmount;
+                betAmount += bet.BetAmount
+                console.log(betCategory)
+            })
+        }
     }
-    console.log(drivers)
-    console.log(betAmount)
-    res.render('BetInfo', {isAuth : req.session.isAuth, drivers : drivers, amount : amount, totalBets : totalBets, betAmount : betAmount})
+
+    res.render('BetInfo', {
+        isAuth : req.session.isAuth,
+        drivers : drivers,
+        amount : amount,
+        totalBets : totalBets,
+        betAmount : betAmount,
+        yesno : yesno,
+        yesnoAmount : yesnoAmount,
+        betCategory : betCategory
+    })
 })
 
 app.get('/bets', isAuth, async (req,res) => {
-    let bets = await getBets();
+    let betCategory = "Placement"
+    let bets = await getBets(betCategory);
     let userBets = await getUserBets(req.session.user_id)
     let userData = await getUserData(req.session.user_id)
     let result = userBets.filter((element1) => {
@@ -156,17 +188,16 @@ app.get('/bets', isAuth, async (req,res) => {
             return element1.bet_id === element2.bet_id; // return the ones with equal id
        });
     });
-
     let placedBets =[];
     result.forEach(element => {
         placedBets.push(element.bet_id)
     })
-
     res.render('Bets', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
 app.get('/qualification', isAuth, async (req, res) => {
-    let bets = await getBets();
+    let betCategory = "Qualification"
+    let bets = await getBets(betCategory);
     let userBets = await getUserBets(req.session.user_id)
     let userData = await getUserData(req.session.user_id)
     let result = userBets.filter((element1) => {
@@ -182,7 +213,8 @@ app.get('/qualification', isAuth, async (req, res) => {
 })
 
 app.get('/5050', isAuth, async (req, res) => {
-    let bets = await getBets();
+    let betCategory = "5050"
+    let bets = await getBets(betCategory);
     let userBets = await getUserBets(req.session.user_id)
     let userData = await getUserData(req.session.user_id)
     let result = userBets.filter((element1) => {
@@ -195,6 +227,23 @@ app.get('/5050', isAuth, async (req, res) => {
         placedBets.push(element.bet_id)
     })
     res.render('5050', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
+})
+
+app.get('/pitstops', isAuth, async (req,res) => {
+    let betCategory = "Pitstops"
+    let bets = await getBets(betCategory);
+    let userBets = await getUserBets(req.session.user_id)
+    let userData = await getUserData(req.session.user_id)
+    let result = userBets.filter((element1) => {
+        return bets.some((element2) => {
+            return element1.bet_id === element2.bet_id; // return the ones with equal id
+       });
+    });
+    let placedBets =[];
+    result.forEach(element => {
+        placedBets.push(element.bet_id)
+    })
+    res.render('Pitstops', {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
 app.get('/admin', (req, res) => {
@@ -236,10 +285,11 @@ function getJoinedLeagues(user_id){
     })
 }
 
-function getBets(){
+function getBets(betCategory){
     return new Promise ((resolve, reject) => {
         db.query(
-            'SELECT * FROM bets',
+            'SELECT * FROM bets WHERE Category = ?',
+            [betCategory],
             function(err, result){
                 if(err){
                     reject(err)

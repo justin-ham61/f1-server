@@ -54,7 +54,8 @@
     <div class="tabs">
         <a class='tab-head' id='popular' href="/bets"> PLACEMENT </a> 
         <a class='tab-head' id='trending' href="/qualification" > QUALIFICATION </a>
-        <a class='tab-head' id='new' href="/5050"> 50/50 </a>
+        <a class='tab-head' id='new' href="/5050"> YES/NO </a>
+        <a class="tab-head" id="pitstop" href="/pitstops">PIT STOPS</a>
         <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
     </div>
   </div>
@@ -78,9 +79,9 @@
             <td>Options</td>
             <th></th>
         </tr>
-        <% for (let i = 40; i < 52; i++) { %> 
+        <% for (let i = 0; i < bets.length; i++) { %> 
             <tr class="table-row">
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- i - 19 %> </td>
+                <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- i + 1 %> </td>
                 <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].BetName %> </td>
                 <td onclick="getBetStats(`<%- bets[i].bet_id %>`);"><%- bets[i].Category %> </td>
                 <% if (placedBets.indexOf(bets[i].bet_id) < 0) { %> 
@@ -88,8 +89,8 @@
                 <td><input id="betAmount" name="betAmount" type="number" placeholder="amount" required></td>
                 <td><select id="driver" name="driver" class="bet-selection" required>
                     <option value="" disabled selected hidden>Select Option</option>
-                    <option value="Y">Yes</option>
-                    <option value="N">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
                 </select></td>
                 <td><button class="bet-btn" type="submit"">Bet</button></td>
                 </form>
