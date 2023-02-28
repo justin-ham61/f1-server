@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
+const nodemailer = require("nodemailer");
 
 
 const options = {
@@ -59,8 +60,13 @@ app.get('/registration', (req, res) => {
     res.render('Registration');
 })
 
+app.get('/EmailConfirm', (req, res) => {
+    res.render('EmailConfirm')
+})
+
+
 app.get('/login', (req, res) => {
-    res.render('Login');
+    res.render('Login', {errorMessage : req.flash('login-error')});
 })
 
 app.get('/account', isAuth, (req, res) => {
@@ -230,6 +236,8 @@ app.post('/logout', (req,res) => {
     })
 })
 
+
+
 app.listen(8080, () => {
     console.log("server is running on port 8000");
 })
@@ -237,10 +245,12 @@ app.listen(8080, () => {
 const leagueRouter = require('./routes/Leagues.js');
 const userRouter = require('./routes/UserAuth.js');
 const betRouter = require('./routes/Bets.js')
+const adminRouter = require('./routes/Admin.js');
 const { getEnabledCategories } = require('trace_events');
 app.use('/UserAuth', userRouter);
 app.use('/Leagues', leagueRouter);
 app.use('/Bets', betRouter);
+app.use('/Admin',adminRouter)
 
 function getJoinedLeagues(user_id){
     return new Promise ((resolve, reject) => {

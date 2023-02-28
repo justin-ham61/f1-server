@@ -21,7 +21,7 @@
           "alpha": "darkblue",
           "alfa": "darkred"
         }
-        badge.style.cssText = `background: linear-gradient( ${color[`${team}`]} 60%, transparent 40%)`
+        badge.style.cssText = `background: linear-gradient( ${color[`${team}`]} 60%, white 40%)`
       }
       function timeFunction(){
         console.log("hello")
@@ -30,7 +30,7 @@
             const hour = document.getElementById('hour')
             const minute = document.getElementById('minute')
             const second = document.getElementById('second')
-            var countDownDate = new Date("Mar 5, 2023 00:00:00").getTime();
+            var countDownDate = new Date("Mar 4, 2023 00:00:00").getTime();
             var now = new Date().getTime();
             var timeleft = countDownDate - now;
             var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
@@ -49,7 +49,7 @@
 <% if (isAuth) { %>
   <body onload="getIdColor(`<%- user[0].Team %>`); timeFunction();">
 <% } else { %>  
-  <body>
+  <body onload="timeFunction();">
 <% } %> 
   <div class="header-box">
     <div class="left-header">
@@ -87,18 +87,47 @@
   </div>
   <div class="countdown-bar">
     <p>Time Until Race Bet Lock In: </p>
-      <div class="number-box" id="day">1</div>
+      <div class="number-box" id="day"></div>
     <div>DAYS</div>
-      <div class="number-box" id="hour">0</div>
+      <div class="number-box" id="hour"></div>
     <div>HOURS</div>
-      <div class="number-box" id="minute">1</div>
+      <div class="number-box" id="minute"></div>
     <div>MINUTES</div>
-      <div class="number-box" id="second">5</div>
+      <div class="number-box" id="second"></div>
     <div>SECONDS</div>
+  </div>
+  <div class="race-info">
+    <div class="container">
+      <div class="upcoming-race" style="background-image: url(/images/bahrain.jpeg); background-size: cover;"">
+        <div class="overlay">
+          <div class="title-box">
+            <h1>Previous Race:</h1>
+            <h1 class="race-name">Bahrain</h1>
+            <div class="date-box">
+              <h2>03-05 Mar</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="next-races" style="background-image: url(/images/saudi.jpeg); background-size: cover;">
+        <div class="overlay">
+          <div class="title-box">
+            <h1>Next Race:</h1>
+            <h1 class="race-name">Saudi Arabia</h1>
+            <div class="date-box">
+              <h2>31-02 Apr</h2>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <% if (isAuth) { %> 
     <div class="landing-page-body">
-      <div class="id-badge" id="badge" style='background: linear-gradient( navy 60%, transparent 40%);'>
+      <div class="id-badge" id="badge" style='background: linear-gradient( white 60%, white 40%);'>
         <div class="hole"></div>
         <div class="badge-words">
           <p style="font-size: 30px; font-weight: bold;"><%- user[0].FirstName %> <%- user[0].LastName %></p>
