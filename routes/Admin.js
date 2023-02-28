@@ -23,7 +23,6 @@ db.connect(function(err){
     if(err) {
         return console.error('error: ' + err.message);
     }
-    console.log('Connected to the MySql server.');
 })
 
 router.post('/SendMail', async (req, res) => {

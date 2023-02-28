@@ -21,9 +21,64 @@
             console.info(err + " url: " + url);
             });
         }
+
+        var leagueResult; 
+
+        function joinLeague(){
+            const leagueName = document.getElementById('leagueSearch').value
+            fetch('/Leagues/SearchLeague', {
+              method: 'POST', 
+              body: JSON.stringify({ leagueName }),
+              headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then((data) => {
+              if (!data){
+                alert("League with that name does not exist")
+              } else {
+                const overlay = document.getElementById('league-overlay')
+                overlay.style.display = 'flex';
+                leagueResult = data[0];
+              }
+            })
+        }
+
+        function leaguePass(){
+          const leaguePassword = document.getElementById('league-password').value
+          if (leaguePassword == leagueResult.LeaguePassword){
+            fetch('Leagues/JoinLeague', {
+              method: 'POST',
+              body: JSON.stringify({ leagueResult, leaguePassword }),
+              headers: { 'Content-Type': 'application/json' }
+            })
+            .then((response) => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                  alert("You Are Already in This League")
+                }
+            })
+          } else {
+            alert('Incorrect League Password')
+          }
+        }
+
+        window.onclick = e => {
+            if (e.target.id == 'league-overlay'){
+              const overlay = document.getElementById('league-overlay')
+              overlay.style.display = 'none'
+            }
+        }  
+
     </script>
 </head>
 <body>
+  <div id="league-overlay">
+    <div class="league-password">
+      <input type="text" placeholder="League Password" id="league-password">
+      <button type="button" onclick="leaguePass()">Join League</button>
+    </div>
+  </div>
   <div class="header-box">
     <div class="left-header">
       <a class="header-logo" href="/">F1 Bets</a>
@@ -62,11 +117,9 @@
     <form action="/LeagueCreateForm" method="GET">
         <button class="league-btn">Create League</button>
     </form>
-    <form action="/Leagues/JoinLeague" method="POST">
-        <input type="text" name="leagueSearch">
-        <button class="league-btn">Search Leagues</button>
-    </form>
-    </div>
+    <input type="text" name="leagueSearch" id="leagueSearch">
+    <button class="league-btn" type="button" onclick="joinLeague()">Search Leagues</button>
+  </div>
     <div class="index-box">
         <div class="league-list">
         <% if (leagues.length > 0) {  %> 

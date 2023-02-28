@@ -222,10 +222,10 @@ app.get('/bets/:betCategory', isAuth, async (req,res) => {
     res.render(`${betCategory}`, {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
-app.get('/admin', (req, res) => {
+app.get('/admin', isAuth, (req, res) => {
     res.render('Admin')
 })
-app.get('/apitest', (req, res) => {
+app.get('/apitest', isAuth, (req, res) => {
     res.render('apitest')
 })
 

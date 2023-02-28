@@ -76,7 +76,6 @@ db.connect(function(err){
     if(err) {
         return console.error('error: ' + err.message);
     }
-    console.log('Connected to the MySql server.');
 })
 
 function placeBet(value1, remainingBalance, user_id){

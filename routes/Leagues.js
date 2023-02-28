@@ -17,7 +17,6 @@ db.connect(function(err){
     if(err) {
         return console.error('error: ' + err.message);
     }
-    console.log('Connected to the MySql server.');
 })
 
 router.post('/CreateLeague', async (req, res) => {
@@ -44,16 +43,44 @@ router.post('/LeagueInfo', async (req, res) => {
     res.redirect(`/leagues/${req.body.leagueName}`)
 })
 
-router.post('/JoinLeague', async (req, res) => {
-    let result = await checkLeague(req.body.leagueSearch);
+router.post('/SearchLeague', async (req, res) => {
+    let leagueName = req.body.leagueName;
+    let result = await checkLeague(leagueName);
     if (result.length == 0){
-        res.redirect('/leagues')
+        res.send(false)
     } else {
-        let ids = [req.session.user_id, result[0].league_id]
-        await addUserToLeague(ids);
-        res.redirect('/leagues')
+        res.send(result)
     }
 })
+
+router.post('/JoinLeague', async (req, res) => {
+    let league = req.body.leagueResult;
+    let leagueId = league.league_id
+    let leagueUserCheck = await leagueCheck(req.session.user_id, leagueId);
+    if (leagueUserCheck.length == 0){
+        let ids = [req.session.user_id, leagueId]
+        await addUserToLeague(ids);
+        res.redirect('/leagues')  
+    } else {
+        res.send(false)
+    }
+})
+
+function leagueCheck(user_id, league_id){
+    return new Promise ((resolve, reject) => {
+        db.query(
+            'SELECT * FROM userleagues WHERE user_id = ? AND league_id = ?;',
+            [[user_id], [league_id]],
+            function(err, result){
+                if (err){
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            }
+        )
+    })
+}
 
 function getLeagueMembers(leagueId){
     return new Promise ((resolve, reject) => {
