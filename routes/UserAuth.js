@@ -207,8 +207,8 @@ async function sendmail(email, encryptedEmail){
         port: 465,
         secure: true,
         auth: {
-            user: "jiheon.ham61@gmail.com",
-            pass: "rmqigofpuabmlubo"
+            user: "racegambit@gmail.com",
+            pass: "rujohftxrocjqlbd"
         }
     });
 
