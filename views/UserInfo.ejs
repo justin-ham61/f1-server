@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
     <title>My Leagues</title>
     <script>
-      function getUserBets(user_id){
-        window.location.href = `https://localhost:8080/UserInfo/${user_id}`;
-      }
     </script>
 </head>
 <body>
@@ -47,31 +44,28 @@
       <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
     </div>
   </div>
-    <div>
-        <h1 style="text-align: center;"><%- leagueName %></h1>
-    </div>
-    <div>
-        <table class="center league-user-table">
-            <tr class="table-head">
-                <th style="width: 5%;">Placement</th>
-                <th style="width: 20%;">First Name</th>
-                <th style="width: 20%;">Last Name</th>
-                <th style="width: 30%;">Title</th>
-                <th>Balance</th>
+  <div class="bet-box">
+    <h1><%- user[0].FirstName %> <%- user[0].LastName %> </h1>
+    <h2>Account Balance: $<%- user[0].Balance  %> </h2>
+  
+    <table class="center bet-table">
+        <tr class="table-head">
+            <th style="width: 5%;">No.</th>
+            <th style="width: 30%;">Bet Name</th>
+            <td>Bet Amount</td>
+            <td>Bet Choice</td>
+        </tr>
+        <% if (bets.length > 0) { %> 
+          <% for (let i = 0; i < bets.length; i++) { %> 
+            <tr class="table-row">
+              <th><%- i + 1 %></th>
+              <th><%- bets[i].BetName %> </th>
+              <th>$<%- bets[i].BetAmount %></th>
+              <th><%- bets[i].BetChoice %></th>
             </tr>
-            <% if (name.length > 0) { %>
-                <% for (let i = 0; i < name.length; i++) { %>
-                    <tr class="table-row" onclick="getUserBets(`<%- name[i].user_id %>`);">
-                        <td><%- i + 1 %> </td>
-                        <td><%- name[i].FirstName %> </td>
-                        <td><%- name[i].LastName %> </td>
-                        <td><%- name[i].Job %> </td>
-                        <td>$<%- name[i].Balance %> </td>
-                    </tr>
-                <% } %> 
-            <% } %> 
-        </table>
-        
-    </div>
+          <% } %> 
+        <% } %> 
+    </table>
+  </div>
 </body>
 </html>

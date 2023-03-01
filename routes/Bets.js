@@ -42,26 +42,41 @@ router.post('/PlaceBet/:bet_id/:betCategory', async (req, res) => {
 })
  
 router.post('/DistributeWinnings', async (req, res) => {
-    let winningChoice = req.body.winningChoice;
-    let bet_id = req.body.bet_id;
-    let userBets = await getUserBets(bet_id);
-    let totalPool = 0;
-    let correctBetPool = 0;
-    userBets.forEach((element) => {
-        totalPool += element.BetAmount;
-        if (element.BetChoice === winningChoice){
-            correctBetPool += element.BetAmount;
-        }
+    let betCategory = req.body.category
+    let year = req.body.year
+    let round = req.body.round
+    let result = await fetch(`https://ergast.com/api/f1/${year}/${round}/results.json`, {
+        method: "GET",
     })
-    userBets.forEach((element) => {
-        if (element.BetChoice === winningChoice){
-            let distributionPercent = (element.BetAmount/correctBetPool);
-            let amountGain = (distributionPercent * totalPool);
-            updateUserBalance(element.user_id, amountGain);
-            clearBets();
-            console.log(amountGain)
-        }
+    .then((response) => response.json())
+    .then((data) => {
+        return(data)
     })
+    let bets = await getBets(betCategory)
+    console.log(bets)
+    let driverArray = createResultArray(result)
+    console.log(driverArray)
+    for(let i = 0; i < bets.length; i++){
+        let userBets = await getUserBets(bets[i].bet_id)
+        let winningChoice = driverArray[i]
+        let totalPool = 0;
+        let correctBetPool = 0;
+        userBets.forEach((element) => {
+            totalPool += element.BetAmount;
+            if (element.BetChoice === winningChoice){
+                correctBetPool += element.BetAmount;
+            }
+        })
+        userBets.forEach((element) => {
+            if (element.BetChoice === winningChoice){
+                let distributionPercent = (element.BetAmount/correctBetPool);
+                let amountGain = (distributionPercent * totalPool).toFixed(2);
+                //updateUserBalance(element.user_id, amountGain);
+                console.log("Total Pool for " + (i+1) + " Place: " + totalPool)
+                console.log("User: " + element.user_id + " Amount Gain: $" + amountGain + " % of winning pool: " + (distributionPercent*100) + "%")
+            }
+        })
+    }
     res.redirect('/admin')
 })
 
@@ -101,6 +116,22 @@ function placeBet(value1, remainingBalance, user_id){
             }
         }
     )
+}
+
+function getBets(betCategory){
+    return new Promise ((resolve, reject) => {
+        db.query(
+            'SELECT * FROM bets WHERE Category = ?',
+            [betCategory],
+            function(err, result){
+                if(err){
+                    reject(err)
+                } else {
+                    resolve(result)
+                }
+            }
+        )
+    })
 }
 
 function checkUserBet(bet_id, user_id){
@@ -193,5 +224,16 @@ function addBet(betName, category){
         }
     )
 }
+
+function createResultArray(data){
+    let driverArray = []
+    let raceResults = data.MRData.RaceTable.Races[0].Results;
+    raceResults.forEach((result) => {
+        let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
+        driverArray.push(driverFullName);
+    });
+    return(driverArray);
+}
+
 
 module.exports = router;

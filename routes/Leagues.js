@@ -85,7 +85,7 @@ function leagueCheck(user_id, league_id){
 function getLeagueMembers(leagueId){
     return new Promise ((resolve, reject) => {
         db.query(
-            'SELECT FirstName, LastName, Balance, Job FROM users INNER JOIN userleagues ON users.user_id = userleagues.user_id WHERE league_id = ?;',
+            'SELECT users.user_id, FirstName, LastName, Balance, Job FROM users INNER JOIN userleagues ON users.user_id = userleagues.user_id WHERE league_id = ?;',
             leagueId,
             function(err, result){
                 if (err){

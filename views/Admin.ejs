@@ -7,34 +7,21 @@
     <title>Admin</title>
 </head>
 <body>
-    <label for="WinDistro">Distribute Winnings</label>
+    <label for="WinDistro">Distribute Winnings for Placement/Qualification</label>
     <form name="WinDistro" action="/Bets/DistributeWinnings" method="POST">
-        <select id="driver" name="winningChoice" class="bet-selection" required>
-            <option value="" disabled selected hidden>Select a Driver</option>
-            <option value="Max Verstappen">Max Verstappen</option>
-            <option value="Sergio Perez">Sergio Perez</option>
-            <option value="Charles Leclerc">Charles Leclerc</option>
-            <option value="Carlos Sainz">Carlos Sainz</option>
-            <option value="Lewis Hamilton">Lewis Hamilton</option>
-            <option value="George Russel">George Russel</option>
-            <option value="Lando Norris">Lando Norris</option>
-            <option value="Oscar Piastri">Oscar Piastri</option>
-            <option value="Pierre Gasly">Pierre Gasly</option>
-            <option value="Esteban Ocon">Esteban Ocon</option>
-            <option value="Fernando Alonso">Fernando Alonso</option>
-            <option value="Lance Stroll">Lance Stroll</option>
-            <option value="Valteri Bottas">Valteri Bottas</option>
-            <option value="Zhou Guanyu">Zhou Guanyu</option>
-            <option value="Kevin Magnussen">Kevin Magnussen</option>
-            <option value="Nico Hulkenberg">Nico Hulkenberg</option>
-            <option value="Nick De Vries">Nick De Vries</option>
-            <option value="Yuki Tsunoda">Yuki Tsunoda</option>
-            <option value="Alex Albon">Alex Albon</option>
-            <option value="Logan Sargeant">Logan Sargeant</option>
+        <select name="category" id="category" required>
+            <option value="Placement">Placement</option>
+            <option value="Qualification">Qualification</option>
         </select>
-        <input name="bet_id" type="number" placeholder="bet_id">
+        <input type="text" name="year" id="year" placeholder="year" required>
+        <input name="round" type="number" id="round" placeholder="round" required>
         <button type="submit">Distribute</button>
     </form>
+    <label for="pitdistro">Distribute Winnings for Pitstops</label>
+    <form action="" name="pitdistro">
+        
+    </form>
+
     <label for="AddBet">Adding Bets</label>
     <form name="AddBet" action="/Bets/AddBet" method="POST">
         <input type="text" placeholder="Bet Name" name="betName">
@@ -52,6 +39,9 @@
     </form>
     <form action="/Admin/CreateCrypt" method="POST">
         <button type="submit">Create Crypt</button>
+    </form>
+    <form action="/Bets/DistributeWinnings/Placement" method="POST">
+        <button type="submit">Distribute Winnings</button>
     </form>
 </body>
 </html>

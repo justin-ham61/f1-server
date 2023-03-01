@@ -92,7 +92,9 @@ router.post('/loginUser', async (req, res) => {
     let {email, password} = req.body;
     let err = {email: 0, verification: 0}
     let userData = await checkEmail(email);
-
+    if (userData[0].user_id === 1){
+        req.session.isAdmin = true;
+    }
 
     console.log(userData[0].Active)
     if (userData.length == 0){
@@ -118,9 +120,8 @@ router.post('/loginUser', async (req, res) => {
             req.session.team = userData[0].Team;
             req.session.birth = userData[0].Birth;
             req.session.email = userData[0].Email
-            console.log('login successful');
             req.session.save
-            console.log('logged in')
+            console.log(req.session.email + ": logged in")
             res.redirect('/')
         } else if (!verification){
             console.log('failed log in')
@@ -216,7 +217,7 @@ async function sendmail(email, encryptedEmail){
         to: `${email}`, // list of receivers
         subject: "Verify your email", // Subject line
         text: "Email Verification", // plain text body
-        html: `<a href="https://localhost:8080/UserAuth/VerifyEmail/${encryptedEmail}">Click to verify email</a>`
+        html: `<a href="https://racegambit.com/UserAuth/VerifyEmail/${encryptedEmail}">Click to verify email</a>`
       });
       console.log("Message sent: %s", info.messageId);
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));

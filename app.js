@@ -47,6 +47,14 @@ const isAuth = (req, res, next) => {
     }
 }
 
+const isAdmin = (req, res, next) => {
+    if(req.session.isAdmin){
+        next()
+    } else {
+        res.redirect("/")
+    }
+}
+
 app.get('/', async (req, res) => {
     let isAuth = req.session.isAuth;
     let user;
@@ -222,7 +230,25 @@ app.get('/bets/:betCategory', isAuth, async (req,res) => {
     res.render(`${betCategory}`, {isAuth : req.session.isAuth, bets : bets, userBets : userBets, placedBets : placedBets, result : result, errorMessage : req.flash('error'), successMessage : req.flash('success'), balance : userData[0].Balance})
 })
 
-app.get('/admin', isAuth, (req, res) => {
+app.get('/UserInfo/:user_id', isAuth, async (req, res) => {
+    let userData = await getUserData(req.params.user_id)
+    let userBets = await getUserBets(req.params.user_id)
+    let placedBets = await getPlacedBets(req.params.user_id)
+    let completeBets = []
+    for (let i = 0; i < userBets.length; i++){
+        let data = {
+            "BetName": `${placedBets[i].BetName}`,
+            "BetAmount": `${userBets[i].BetAmount}`,
+            "BetChoice": `${userBets[i].BetChoice}`
+        }
+        completeBets.push(data)
+    }
+    console.log(completeBets)
+    res.render('UserInfo', {isAuth : req.session.isAuth, bets : completeBets, user : userData})
+})
+
+app.get('/admin', isAdmin, (req, res) => {
+    console.log(req.session.isAdmin)
     res.render('Admin')
 })
 app.get('/apitest', isAuth, (req, res) => {
@@ -256,6 +282,22 @@ function getJoinedLeagues(user_id){
     return new Promise ((resolve, reject) => {
         db.query(
             'SELECT leagues.league_id, LeagueName FROM leagues INNER JOIN userleagues ON leagues.league_id = userleagues.league_id WHERE user_id = ?;',
+            [user_id],
+            function(err, result){
+                if(err){
+                    reject(err)
+                } else {
+                    resolve(result)
+                }
+            }
+        )
+    })
+}
+
+function getPlacedBets(user_id){
+    return new Promise ((resolve, reject) => {
+        db.query(
+            'SELECT bets.BetName FROM bets INNER JOIN userbets ON bets.bet_id = userbets.bet_id WHERE user_id = ?;',
             [user_id],
             function(err, result){
                 if(err){

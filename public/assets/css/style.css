@@ -422,6 +422,7 @@ select,
   border-color: rgb(255, 17, 0);
   color: rgb(255, 17, 0);
   transition: .2s;
+  cursor: pointer;
 }
 
 .league-list {
