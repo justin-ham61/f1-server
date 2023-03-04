@@ -1,4 +1,5 @@
 const express = require('express')
+require('dotenv').config({path: __dirname + '/.env'})
 const cors = require('cors')
 const app = express();
 const path = require('path');
@@ -7,7 +8,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
-const nodemailer = require("nodemailer");
+const schedule = require('node-schedule');
 
 
 const options = {

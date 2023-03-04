@@ -4,7 +4,26 @@ const express = require('express');
 const router = express.Router();
 let mysql = require('mysql');
 const flash = require('connect-flash');
+const schedule = require('node-schedule');
 
+var isLockedRace = true; 
+var isLockedQuali = false;
+const qualiDate = new Date('2023-03-04T07:00:00-08:00');
+const raceDate = new Date('2023-03-05T07:00:00-08:00')
+
+
+function toggleIsLockedRace(){
+    isLockedRace = true; 
+    console.log(isLockedRace)
+}
+
+function toggleIsLockedQuali(){
+    isLockedQuali = true
+    console.log(isLockedQuali)
+}
+
+const toggleQuali = schedule.scheduleJob(qualiDate, toggleIsLockedQuali)
+const toggleRace = schedule.scheduleJob(raceDate, toggleIsLockedRace)
 
 let db = mysql.createConnection({
     host: '54.71.40.98',
@@ -19,26 +38,33 @@ router.post('/BetInfo', async (req, res) => {
 
 router.post('/PlaceBet/:bet_id/:betCategory', async (req, res) => {
     //check if user already bet on this bet
-    let betCheck = await checkUserBet(req.params.bet_id, req.session.user_id)
-    if (betCheck.length > 0){
-        console.log('bet already placed')
-        req.flash('error', 'Unable to Place Bet: Bet Already Placed')
+    if (isLockedQuali && req.params.betCategory == "Qualification"){
+        req.flash('error', 'Qualification Bets Are Locked')
+        res.redirect(`/bets/${req.params.betCategory}`)
+    } else if (isLockedRace && (req.params.betCategory == "Placement") || (req.params.betCategory == "5050") || (req.params.betCategory == "Pitstops")){
+        req.flash('error', 'Race Bets Are Locked')
+        res.redirect(`/bets/${req.params.betCategory}`)
     } else {
-        //Fetch current users balance
-        let balance = await getBalance(req.session.user_id);
-        let remainingBalance = (balance - req.body.betAmount)
-        if (remainingBalance >= 0 ){
-            let value1 = [req.params.bet_id, req.session.user_id, req.body.betAmount, req.body.driver];
-            placeBet(value1, remainingBalance, req.session.user_id);
-            req.flash('success', "Successfully Placed Bet")
+        let betCheck = await checkUserBet(req.params.bet_id, req.session.user_id)
+        if (betCheck.length > 0){
+            console.log('bet already placed')
+            req.flash('error', 'Unable to Place Bet: Bet Already Placed')
         } else {
-            console.log('not enough funds')
-            req.flash('error', 'Unable to Place Bet: Not Enough Funds')
+            //Fetch current users balance
+            let balance = await getBalance(req.session.user_id);
+            let remainingBalance = (balance - req.body.betAmount)
+            if (remainingBalance >= 0 ){
+                let value1 = [req.params.bet_id, req.session.user_id, req.body.betAmount, req.body.driver];
+                placeBet(value1, remainingBalance, req.session.user_id);
+                req.flash('success', "Successfully Placed Bet")
+            } else {
+                console.log('not enough funds')
+                req.flash('error', 'Unable to Place Bet: Not Enough Funds')
+            }
+            
         }
-        
+        res.redirect(`/bets/${req.params.betCategory}`)
     }
-    res.redirect(`/bets/${req.params.betCategory}`)
-
 })
  
 router.post('/DistributeWinnings', async (req, res) => {
