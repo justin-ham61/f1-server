@@ -10,6 +10,19 @@ const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
 const schedule = require('node-schedule');
 
+const payDay1 = schedule.scheduleJob("1 1 * * 5", payDay)
+function payDay(){
+    db.query(
+        'UPDATE users SET Balance = Balance + 20000',
+        function(err){
+            if (err){
+                throw err;
+            } else {
+                console.log("Added $20000 to everyone")
+            }
+        }
+    )
+}
 
 const options = {
     host: '54.71.40.98',
@@ -274,6 +287,7 @@ const userRouter = require('./routes/UserAuth.js');
 const betRouter = require('./routes/Bets.js')
 const adminRouter = require('./routes/Admin.js');
 const { getEnabledCategories } = require('trace_events');
+const e = require('connect-flash');
 app.use('/UserAuth', userRouter);
 app.use('/Leagues', leagueRouter);
 app.use('/Bets', betRouter);

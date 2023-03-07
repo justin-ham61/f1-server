@@ -8,11 +8,11 @@
     <script>
         function fetchRaceResult(){
             console.log('clicked')
-            fetch("https://ergast.com/api/f1/2022/1/results.json", {
+            fetch("https://ergast.com/api/f1/2023/1/qualifying.json", {
                 method: "GET",
             })
             .then((response) => response.json())
-            .then((data) => createResultArray(data))
+            .then((data) => createResultArrayQuali(data))
         }
 
         function fetchPitStops(){
@@ -25,7 +25,19 @@
 
         function createResultArray(data){
             let driverArray = []
+            console.log(data)
             let raceResults = data.MRData.RaceTable.Races[0].Results;
+            raceResults.forEach((result) => {
+                let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
+                driverArray.push(driverFullName);
+            });
+            console.log(driverArray)
+        }
+
+        function createResultArrayQuali(data){
+            let driverArray = []
+            console.log(data)
+            let raceResults = data.MRData.RaceTable.Races[0].QualifyingResults;
             raceResults.forEach((result) => {
                 let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
                 driverArray.push(driverFullName);

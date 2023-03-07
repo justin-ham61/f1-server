@@ -5,11 +5,12 @@ const router = express.Router();
 let mysql = require('mysql');
 const flash = require('connect-flash');
 const schedule = require('node-schedule');
+const { route } = require('./Leagues');
 
-var isLockedRace = true; 
+var isLockedRace = false; 
 var isLockedQuali = false;
-const qualiDate = new Date('2023-03-04T07:00:00-08:00');
-const raceDate = new Date('2023-03-05T07:00:00-08:00')
+const qualiDate = new Date('2023-03-18T10:00:00-08:00');
+const raceDate = new Date('2023-03-19T10:00:00-08:00')
 
 
 function toggleIsLockedRace(){
@@ -71,16 +72,27 @@ router.post('/DistributeWinnings', async (req, res) => {
     let betCategory = req.body.category
     let year = req.body.year
     let round = req.body.round
-    let result = await fetch(`https://ergast.com/api/f1/${year}/${round}/results.json`, {
+    if (betCategory == "Placement"){
+        var result = await fetch(`https://ergast.com/api/f1/${year}/${round}/results.json`, {
         method: "GET",
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        return(data)
-    })
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            return(data)
+        })
+        var driverArray = createResultArray(result)
+    } else if (betCategory == "Qualification"){
+        var result = await fetch(`https://ergast.com/api/f1/${year}/${round}/qualifying.json`, {
+        method: "GET",
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            return(data)
+        })
+        var driverArray = createQualiResultArray(result)
+    }
     let bets = await getBets(betCategory)
     console.log(bets)
-    let driverArray = createResultArray(result)
     console.log(driverArray)
     for(let i = 0; i < bets.length; i++){
         let userBets = await getUserBets(bets[i].bet_id)
@@ -97,7 +109,7 @@ router.post('/DistributeWinnings', async (req, res) => {
             if (element.BetChoice === winningChoice){
                 let distributionPercent = (element.BetAmount/correctBetPool);
                 let amountGain = (distributionPercent * totalPool).toFixed(2);
-                //updateUserBalance(element.user_id, amountGain);
+                updateUserBalance(element.user_id, amountGain);
                 console.log("Total Pool for " + (i+1) + " Place: " + totalPool)
                 console.log("User: " + element.user_id + " Amount Gain: $" + amountGain + " % of winning pool: " + (distributionPercent*100) + "%")
             }
@@ -105,6 +117,29 @@ router.post('/DistributeWinnings', async (req, res) => {
     }
     res.redirect('/admin')
 })
+
+router.post('/UnlockBets', (req, res) => {
+    isLockedRace = false;
+    isLockedQuali = false; 
+    console.log(isLockedQuali)
+    console.log(isLockedRace)
+    res.redirect('/admin')
+})
+
+router.post('/ClearBets', (req, res) => {
+    db.query(
+        'TRUNCATE userbets;',
+        function (err){
+            if (err){
+                throw err;
+            } else {
+                console.log('deleted all userbets')
+            }
+        }
+    )
+    res.redirect('/admin')
+})
+
 
 router.post('/AddBet', (req, res) => {
     let betName = req.body.betName;
@@ -254,6 +289,16 @@ function addBet(betName, category){
 function createResultArray(data){
     let driverArray = []
     let raceResults = data.MRData.RaceTable.Races[0].Results;
+    raceResults.forEach((result) => {
+        let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
+        driverArray.push(driverFullName);
+    });
+    return(driverArray);
+}
+
+function createQualiResultArray(data){
+    let driverArray = []
+    let raceResults = data.MRData.RaceTable.Races[0].QualifyingResults;
     raceResults.forEach((result) => {
         let driverFullName = result.Driver.givenName + ' ' + result.Driver.familyName
         driverArray.push(driverFullName);
