@@ -9,6 +9,7 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
 const schedule = require('node-schedule');
+var { lockTime, matterRace } = require('./public/constants/const.js')
 
 const payDay1 = schedule.scheduleJob("1 1 * * 5", payDay)
 function payDay(){
@@ -70,12 +71,13 @@ const isAdmin = (req, res, next) => {
 }
 
 app.get('/', async (req, res) => {
+    console.log(lockTime)
     let isAuth = req.session.isAuth;
     let user;
     if (req.session.isAuth){
         user = await getUserData(req.session.user_id)
     }
-    res.render('Index2', {isAuth : isAuth, user : user});
+    res.render('Index2', {isAuth : isAuth, user : user, lockTime : lockTime, matterRace : matterRace});
 })
 
 app.get('/registration', (req, res) => {

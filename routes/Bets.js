@@ -3,28 +3,82 @@ const e = require('express');
 const express = require('express');
 const router = express.Router();
 let mysql = require('mysql');
-const flash = require('connect-flash');
 const schedule = require('node-schedule');
-const { route } = require('./Leagues');
+const { route, lock } = require('./Leagues');
+var { lockTime, matterRace } = require('./../public/constants/const.js')
 
 var isLockedRace = false; 
 var isLockedQuali = false;
-const qualiDate = new Date('2023-03-18T10:00:00-08:00');
-const raceDate = new Date('2023-03-19T10:00:00-08:00')
-
+var qualiDate;
+var raceDate;
+var roundNumber;
 
 function toggleIsLockedRace(){
     isLockedRace = true; 
     console.log(isLockedRace)
+
 }
 
 function toggleIsLockedQuali(){
     isLockedQuali = true
+    lockTime.time = raceDate;
+    lockTime.category = "Race"
     console.log(isLockedQuali)
+}
+
+async function updateRaceDate(){
+    let dates = await getRaceDate();
+
+    dates = dates.MRData.RaceTable.Races //gets the dates for all the races 
+
+    const time = new Date(new Date().toISOString().split('T')[0]) //calls today's date
+
+    for (let i = 0; i < dates.length; i++){
+
+        let fullDate = new Date(dates[i].date + 'T' + dates[i].time); //formats the racedate to have day and the time
+
+        let qualiFullDate = new Date(dates[i].Qualifying.date + 'T' + dates[i].Qualifying.time) //formats the qualidate to have the day and the time
+
+        if (time < fullDate){
+
+            console.log('Race will happen in the future at Round: ' + (i + 1))
+            raceDate = fullDate;
+            qualiDate = qualiFullDate;
+            roundNumber = i + 1
+            lockTime.time = qualiDate;
+            lockTime.category = "Qualification"
+            console.log(raceDate, qualiDate, roundNumber, lockTime)
+            //i have the location of the next race, previous race location is just i - 1
+            matterRace.nextRace.round = roundNumber;
+            matterRace.nextRace.date = dates[i].date;
+            matterRace.nextRace.name = dates[i].raceName;
+            matterRace.nextRace.race = dates[i].Circuit.circuitId
+            matterRace.previousRace.round = roundNumber - 1;
+            matterRace.previousRace.date = dates[i-1].date;
+            matterRace.previousRace.name = dates[i-1].raceName;
+            matterRace.previousRace.race = dates[i-1].Circuit.circuitId
+
+            console.log(dates)
+            break;
+
+        }
+    }
+}
+
+async function getRaceDate(){
+    let raceDateResult = await fetch('http://ergast.com/api/f1/current.json', {
+        method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        return(data)
+    })
+    return raceDateResult;
 }
 
 const toggleQuali = schedule.scheduleJob(qualiDate, toggleIsLockedQuali)
 const toggleRace = schedule.scheduleJob(raceDate, toggleIsLockedRace)
+const updateRace = schedule.scheduleJob("1 1 * * 1", updateRaceDate )
 
 let db = mysql.createConnection({
     host: '54.71.40.98',
@@ -35,6 +89,11 @@ let db = mysql.createConnection({
 
 router.post('/BetInfo', async (req, res) => {
     res.redirect(`/BetInfo/${req.body.betCategory}/${req.body.bet_id}`)
+})
+
+router.post('/testDate', async (req,res) => {
+    updateRaceDate();
+    res.redirect('/admin')
 })
 
 router.post('/PlaceBet/:bet_id/:betCategory', async (req, res) => {

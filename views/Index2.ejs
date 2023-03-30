@@ -21,16 +21,16 @@
           "alpha": "darkblue",
           "alfa": "darkred"
         }
-        badge.style.cssText = `background: linear-gradient( ${color[`${team}`]} 60%, white 40%)`
+        badge.style.cssText = `background: linear-gradient(${color[`${team}`]} 60%, white 40%)`
       }
-      function timeFunction(){
-        console.log("hello")
+      function timeFunction(lockTime){
+        console.log(lockTime)
         const interval = setInterval(function() {
             const day = document.getElementById('day')
             const hour = document.getElementById('hour')
             const minute = document.getElementById('minute')
             const second = document.getElementById('second')
-            var countDownDate = new Date("Mar 18, 2023 10:00:00").getTime();
+            var countDownDate = new Date(lockTime).getTime();
             var now = new Date().getTime();
             var timeleft = countDownDate - now;
             var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
@@ -47,9 +47,9 @@
     </script>
 </head>
 <% if (isAuth) { %>
-  <body onload="getIdColor(`<%- user[0].Team %>`); timeFunction();">
+  <body onload="getIdColor(`<%- user[0].Team %>`); timeFunction(`<%- lockTime.time %>`);">
 <% } else { %>  
-  <body onload="timeFunction();">
+  <body onload="timeFunction(`<%- lockTime.time %>`);">
 <% } %> 
   <div class="header-box">
     <div class="left-header">
@@ -86,7 +86,7 @@
     </div>
   </div>
   <div class="countdown-bar">
-    <p>Time Until Race Bet Lock In: </p>
+    <p>Time Until <%- lockTime.category %> Bet Lock In: </p>
       <div class="number-box" id="day"></div>
     <div>DAYS</div>
       <div class="number-box" id="hour"></div>
@@ -98,26 +98,26 @@
   </div>
   <div class="race-info">
     <div class="container">
-      <div class="upcoming-race" style="background-image: url(/images/bahrain.jpeg); background-size: cover;"">
+      <div class="upcoming-race" style="background-image: url(/images/<%= matterRace.previousRace.race %>.jpeg); background-size: cover;">
         <div class="overlay">
           <div class="title-box">
             <h1>Previous Race:</h1>
-            <h1 class="race-name">Bahrain</h1>
+            <h1 class="race-name"><%- matterRace.previousRace.name %></h1>
             <div class="date-box">
-              <h2>03-05 Mar</h2>
+              <h2><%- matterRace.previousRace.date %> </h2>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="container">
-      <div class="next-races" style="background-image: url(/images/saudi.jpeg); background-size: cover;">
+      <div class="next-races" style="background-image: url(/images/<%= matterRace.nextRace.race %>.jpeg); background-size: cover;">
         <div class="overlay">
           <div class="title-box">
             <h1>Next Race:</h1>
-            <h1 class="race-name">Saudi Arabia</h1>
+            <h1 class="race-name"><%- matterRace.nextRace.name %> </h1>
             <div class="date-box">
-              <h2>17-19 Mar</h2>
+              <h2><%- matterRace.nextRace.date %> </h2>
             </div>
             
           </div>
