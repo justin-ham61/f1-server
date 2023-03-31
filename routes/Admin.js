@@ -6,6 +6,7 @@ const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const { appendFile } = require('fs');
 
+
     // Defining key
 const key = crypto.randomBytes(32);
 

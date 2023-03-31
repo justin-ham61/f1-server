@@ -5,7 +5,7 @@ const router = express.Router();
 let mysql = require('mysql');
 const schedule = require('node-schedule');
 const { route, lock } = require('./Leagues');
-var { lockTime, matterRace } = require('./../public/constants/const.js')
+var { lockTime, matterRace, races } = require('./../public/constants/const.js')
 
 var isLockedRace = false; 
 var isLockedQuali = false;
@@ -35,9 +35,9 @@ async function updateRaceDate(){
 
     for (let i = 0; i < dates.length; i++){
 
-        let fullDate = new Date(dates[i].date + 'T' + dates[i].time); //formats the racedate to have day and the time
+        let fullDate = new Date(races[i].date + 'T' + races[i].time); //formats the racedate to have day and the time
 
-        let qualiFullDate = new Date(dates[i].Qualifying.date + 'T' + dates[i].Qualifying.time) //formats the qualidate to have the day and the time
+        let qualiFullDate = new Date(races[i].Qualifying.date + 'T' + races[i].Qualifying.time) //formats the qualidate to have the day and the time
 
         if (time < fullDate){
 
@@ -50,17 +50,14 @@ async function updateRaceDate(){
             console.log(raceDate, qualiDate, roundNumber, lockTime)
             //i have the location of the next race, previous race location is just i - 1
             matterRace.nextRace.round = roundNumber;
-            matterRace.nextRace.date = dates[i].date;
-            matterRace.nextRace.name = dates[i].raceName;
-            matterRace.nextRace.race = dates[i].Circuit.circuitId
+            matterRace.nextRace.date = races[i].date;
+            matterRace.nextRace.name = races[i].raceName;
+            matterRace.nextRace.race = races[i].Circuit.circuitId
             matterRace.previousRace.round = roundNumber - 1;
-            matterRace.previousRace.date = dates[i-1].date;
-            matterRace.previousRace.name = dates[i-1].raceName;
-            matterRace.previousRace.race = dates[i-1].Circuit.circuitId
-
-            console.log(dates)
+            matterRace.previousRace.date = races[i-1].date;
+            matterRace.previousRace.name = races[i-1].raceName;
+            matterRace.previousRace.race = races[i-1].Circuit.circuitId
             break;
-
         }
     }
 }
