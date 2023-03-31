@@ -58,17 +58,6 @@ async function updateRaceDate(){
     }
 }
 
-async function getRaceDate(){
-    let raceDateResult = await fetch('http://ergast.com/api/f1/current.json', {
-        method: 'GET',
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        return(data)
-    })
-    return raceDateResult;
-}
-
 const toggleQuali = schedule.scheduleJob(qualiDate, toggleIsLockedQuali)
 const toggleRace = schedule.scheduleJob(raceDate, toggleIsLockedRace)
 const updateRace = schedule.scheduleJob("1 1 * * 1", updateRaceDate )
