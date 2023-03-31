@@ -213,7 +213,7 @@ async function sendmail(email, encryptedEmail){
     });
 
     let info = await transport.sendMail({
-        from: '"F1 Bets" <jiheon.ham61@gmail.com>', // sender address
+        from: '"F1 Bets" <racegambit@gmail.com>', // sender address
         to: `${email}`, // list of receivers
         subject: "Verify your email", // Subject line
         text: "Email Verification", // plain text body
