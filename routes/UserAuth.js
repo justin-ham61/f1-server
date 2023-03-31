@@ -201,27 +201,6 @@ function verifyUser(password, hash){
     })
 }
 
-async function sendmail(email, encryptedEmail){
-    var transport = nodemailer.createTransport({
-        host: `smtp.gmail.com`,
-        port: 465,
-        secure: true,
-        auth: {
-            user: "racegambit@gmail.com",
-            pass: "rujohftxrocjqlbd"
-        }
-    });
-
-    let info = await transport.sendMail({
-        from: '"F1 Bets" <racegambit@gmail.com>', // sender address
-        to: `${email}`, // list of receivers
-        subject: "Verify your email", // Subject line
-        text: "Email Verification", // plain text body
-        html: `<a href="https://racegambit.com/UserAuth/VerifyEmail/${encryptedEmail}">Click to verify email</a>`
-      });
-      console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-}
 
 function addCrypt(user_id, encryptedEmail){
     return new Promise ((resolve, reject) => {
