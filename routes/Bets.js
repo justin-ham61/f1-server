@@ -27,10 +27,6 @@ function toggleIsLockedQuali(){
 }
 
 async function updateRaceDate(){
-    let dates = await getRaceDate();
-
-    dates = dates.MRData.RaceTable.Races //gets the dates for all the races 
-
     const time = new Date(new Date().toISOString().split('T')[0]) //calls today's date
 
     for (let i = 0; i < dates.length; i++){
