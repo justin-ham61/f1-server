@@ -29,7 +29,7 @@ function toggleIsLockedQuali(){
 async function updateRaceDate(){
     const time = new Date(new Date().toISOString().split('T')[0]) //calls today's date
 
-    for (let i = 0; i < dates.length; i++){
+    for (let i = 0; i < races.length; i++){
 
         let fullDate = new Date(races[i].date + 'T' + races[i].time); //formats the racedate to have day and the time
 
