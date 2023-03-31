@@ -41,28 +41,6 @@ router.post('/CreateCrypt', async (req, res) => {
 
 module.exports = router;
 
-async function sendmail(){
-    var transport = nodemailer.createTransport({
-        host: `smtp.gmail.com`,
-        port: 465,
-        secure: true,
-        auth: {
-            user: "jiheon.ham61@gmail.com",
-            pass: "rmqigofpuabmlubo"
-        }
-    });
-
-    let info = await transport.sendMail({
-        from: '"F1 Bets" <NO-REPLY@gmail.com>', // sender address
-        to: "jiheon.ham61@gmail.com", // list of receivers
-        subject: "Thanks for being a part of F1 bets", // Subject line
-        text: "You're gay", // plain text body
-        html: "<b>You're gay</b>", // html body
-      });
-      console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-}
-
 function createCrypto(text){
     const algorithm = 'aes-256-cbc';
         // Creating Cipheriv with its parameter
