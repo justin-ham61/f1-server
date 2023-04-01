@@ -5,16 +5,15 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const flash = require('connect-flash');
-var { config } = require('./../public/constants/keys.js')
 
 
 
 
 let db = mysql.createConnection({
-    host: process.env.DB_HOST || config.DB_HOST,
-    user: process.env.DB_USER || config.DB_USER,
-    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
-    database: process.env.DB_NAME || config.DB_NAME
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 db.connect(function(err){
@@ -276,8 +275,8 @@ async function sendmail(email, encryptedEmail){
         port: 465,
         secure: true,
         auth: {
-            user: process.env.email,
-            pass: process.env.email_password
+            user: process.env.NODEMAIL,
+            pass: process.env.NODEMAIL_PASS
         }
     });
 
