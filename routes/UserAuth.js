@@ -5,13 +5,15 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const flash = require('connect-flash');
+var { config } = require('./public/constants/keys.js')
+
 
 
 let db = mysql.createConnection({
-    host: '54.71.40.98',
-    user: 'server',
-    password: 'keyboardPass1.',
-    database: 'f1'
+    host: process.env.DB_HOST || config.DB_HOST,
+    user: process.env.DB_USER || config.DB_USER,
+    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
+    database: process.env.DB_NAME || config.DB_NAME
 });
 
 db.connect(function(err){
@@ -265,5 +267,27 @@ function deleteCrypt(user_id){
             }
         }
     )
+}
+
+async function sendmail(email, encryptedEmail){
+    var transport = nodemailer.createTransport({
+        host: `smtp.gmail.com`,
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.email,
+            pass: process.env.email_password
+        }
+    });
+
+    let info = await transport.sendMail({
+        from: '"F1 Bets" <racegambit@gmail.com>', // sender address
+        to: `${email}`, // list of receivers
+        subject: "Verify your email", // Subject line
+        text: "Email Verification", // plain text body
+        html: `<a href="https://racegambit.com/UserAuth/VerifyEmail/${encryptedEmail}">Click to verify email</a>`
+      });
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 module.exports = router;

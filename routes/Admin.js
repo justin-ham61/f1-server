@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const { appendFile } = require('fs');
+var { config } = require('./public/constants/keys.js')
+
 
 
     // Defining key
@@ -14,10 +16,10 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 
 let db = mysql.createConnection({
-    host: '54.71.40.98',
-    user: 'server',
-    password: 'keyboardPass1.',
-    database: 'f1'
+    host: process.env.DB_HOST || config.DB_HOST,
+    user: process.env.DB_USER || config.DB_USER,
+    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
+    database: process.env.DB_NAME || config.DB_NAME
 });
 
 db.connect(function(err){
