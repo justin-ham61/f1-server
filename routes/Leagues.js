@@ -3,7 +3,8 @@ const e = require('express');
 const express = require('express');
 const router = express.Router();
 let mysql = require('mysql');
-var { config } = require('./public/constants/keys.js')
+var { config } = require('./../public/constants/keys.js')
+
 const app = express();
 const path = require('path');
 

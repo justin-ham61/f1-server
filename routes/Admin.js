@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const { appendFile } = require('fs');
-var { config } = require('./public/constants/keys.js')
+var { config } = require('./../public/constants/keys.js')
+
 
 
 

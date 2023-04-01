@@ -5,7 +5,7 @@ const router = express.Router();
 let mysql = require('mysql');
 const schedule = require('node-schedule');
 const { route, lock } = require('./Leagues');
-var { config } = require('./public/constants/keys.js')
+var { config } = require('./../public/constants/keys.js')
 var { lockTime, matterRace, races } = require('./../public/constants/const.js')
 
 var isLockedRace = false; 
