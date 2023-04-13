@@ -71,7 +71,6 @@ const isAdmin = (req, res, next) => {
 }
 
 app.get('/', async (req, res) => {
-    console.log(lockTime)
     let isAuth = req.session.isAuth;
     let user;
     if (req.session.isAuth){

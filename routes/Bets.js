@@ -16,11 +16,11 @@ var roundNumber;
 function toggleIsLockedRace(){
     isLockedRace = true; 
     console.log(isLockedRace)
-
 }
 
 function toggleIsLockedQuali(){
     isLockedQuali = true
+    console.log(raceDate)
     lockTime.time = raceDate;
     lockTime.category = "Race"
     console.log(isLockedQuali)
@@ -60,7 +60,7 @@ async function updateRaceDate(){
 
 const toggleQuali = schedule.scheduleJob(qualiDate, toggleIsLockedQuali)
 const toggleRace = schedule.scheduleJob(raceDate, toggleIsLockedRace)
-const updateRace = schedule.scheduleJob("1 1 * * 1", updateRaceDate )
+const updateRace = schedule.scheduleJob("1 1 1 * * 1", updateRaceDate)
 
 let db = mysql.createConnection({
     host: process.env.DB_HOST,

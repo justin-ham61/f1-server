@@ -6,9 +6,6 @@ const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 const flash = require('connect-flash');
 
-
-
-
 let db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -80,12 +77,14 @@ router.post('/SendEmailVerification/:encryptedEmail/:email', async (req, res) =>
 router.get('/VerifyEmail/:crypt', async (req, res) => {
     let crypt = req.params.crypt;
     let result = await checkCrypt(crypt);
-    let user_id = result[0].user_id
     if (result.length > 0){
+        let user_id = result[0].user_id
         await updateUserVerification(user_id)
+        console.log(`added ${user_id} to the database`)
         deleteCrypt(user_id);
         res.redirect('/login')
     } else {
+        console.log('failed to verify crypt')
         res.redirect('/registration')
     }
 })
