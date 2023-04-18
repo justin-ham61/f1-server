@@ -3,15 +3,15 @@ const e = require('express');
 const express = require('express');
 const router = express.Router();
 let mysql = require('mysql');
-
+const { config } = require('./../public/constants/keys.js')
 const app = express();
 const path = require('path');
 
 let db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: process.env.DB_HOST || config.DB_HOST,
+    user: process.env.DB_USER || config.DB_USER,
+    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
+    database: process.env.DB_NAME || config.DB_NAME
 });
 
 db.connect(function(err){

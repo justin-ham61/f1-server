@@ -10,6 +10,7 @@ const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
 const schedule = require('node-schedule');
 var { lockTime, matterRace } = require('./public/constants/const.js')
+const { config } = require('./public/constants/keys.js')
 
 const payDay1 = schedule.scheduleJob("1 1 * * 5", payDay)
 function payDay(){
@@ -26,22 +27,22 @@ function payDay(){
 }
 
 const options = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: process.env.DB_HOST || config.DB_HOST,
+    user: process.env.DB_USER || config.DB_USER,
+    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
+    database: process.env.DB_NAME || config.DB_NAME
 };
 
 const db = mysql.createPool(options);
 const sessionStore = new MySQLStore(options);
 
 app.use(session({
-    secret: process.env.SESSION_KEY,
+    secret: process.env.SESSION_KEY || config.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
     cookie: { secure: false }
-    })  
+    }) 
 );
 
 app.use(flash());

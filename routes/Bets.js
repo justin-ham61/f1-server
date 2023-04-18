@@ -6,6 +6,8 @@ let mysql = require('mysql');
 const schedule = require('node-schedule');
 const { route, lock } = require('./Leagues');
 var { lockTime, matterRace, races } = require('./../public/constants/const.js')
+const { config } = require('./../public/constants/keys.js')
+
 
 var isLockedRace = false; 
 var isLockedQuali = false;
@@ -63,10 +65,10 @@ const toggleRace = schedule.scheduleJob(raceDate, toggleIsLockedRace)
 const updateRace = schedule.scheduleJob("1 1 1 * * 1", updateRaceDate)
 
 let db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: process.env.DB_HOST || config.DB_HOST,
+    user: process.env.DB_USER || config.DB_USER,
+    password: process.env.DB_PASSWORD || config.DB_PASSWORD,
+    database: process.env.DB_NAME || config.DB_NAME
 });
 
 router.post('/BetInfo', async (req, res) => {

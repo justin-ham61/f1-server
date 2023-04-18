@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Home</title>
     <script>
@@ -44,6 +45,11 @@
             document.getElementById("second").innerHTML = seconds
             }, 1000);
       }
+
+      function displayMenu(){
+        let overlay = document.getElementById('side-menu-underlay')
+        overlay.style.display = 'block'
+      }
     </script>
 </head>
 <% if (isAuth) { %>
@@ -51,6 +57,23 @@
 <% } else { %>  
   <body onload="timeFunction(`<%- lockTime.time %>`);">
 <% } %> 
+  <div id="side-menu-underlay">
+    <div class="side-menu">
+      <div class="menu-bar">
+        <h1 class="menu-logo">Race Gambit</h1>
+      </div>
+      <% if (!isAuth) { %>
+        <form action="/login" class="form-width">
+          <button type="submit" class="sign-in side-menu-button">SIGN IN</button>
+        </form>
+        <form action="/registration" class="form-width">
+          <button type="submit" class="register side-menu-button">REGISTER</button>
+        </form>
+      <% } else if (isAuth) { %>
+
+      <% } %>
+    </div>
+  </div>
   <div class="header-box">
     <div class="left-header">
       <a class="header-logo" href="/">F1 Bets</a>
@@ -77,24 +100,36 @@
     <% } %> 
   </div>
   <div class="tabs-bar">
-    <div class="tabs">
+    <div class="large-tabs">
       <a class='tab-head' id='popular' href="/bets/Placement"> PLACEMENT </a> 
       <a class='tab-head' id='trending' href="/bets/Qualification" > QUALIFICATION </a>
       <a class='tab-head' id='new' href="/bets/5050"> YES/NO </a>
       <a class="tab-head" id="pitstop" href="/bets/Pitstops">PIT STOPS</a>
       <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
     </div>
+    <div class="small-tabs-bar">
+      <div class="small-tabs-button">
+        <i class="fa-solid fa fa-bars fa-xl" onclick="displayMenu();"></i>
+      </div>
+      <div class="small-logo">
+        <p>RG</p>
+      </div>
+    </div>
   </div>
-  <div class="countdown-bar">
-    <p>Time Until <%- lockTime.category %> Bet Lock In: </p>
+  <div class="big-countdown-bar">
+    <p class="time-word">Time Until <%- lockTime.category %> Bet Lock In: </p>
+    <p class="colon">Bet Lock In: </p>
       <div class="number-box" id="day"></div>
-    <div>DAYS</div>
+    <div class="time-word">DAYS</div>
+    <div class="colon">:</div>
       <div class="number-box" id="hour"></div>
-    <div>HOURS</div>
+    <div class="time-word">HOURS</div>
+    <div class="colon">:</div>
       <div class="number-box" id="minute"></div>
-    <div>MINUTES</div>
+    <div class="time-word">MINUTES</div>
+    <div class="colon">:</div>
       <div class="number-box" id="second"></div>
-    <div>SECONDS</div>
+    <div class="time-word">SECONDS</div>
   </div>
   <div class="race-info">
     <div class="container">
