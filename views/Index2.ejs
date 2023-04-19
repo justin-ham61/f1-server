@@ -10,6 +10,7 @@
     <script>
       function getIdColor(team){
         const badge = document.getElementById('badge')
+        const badge2 = document.getElementById('badge2')
         const color = {
           "redbull": "navy",
           "ferrari": "red",
@@ -23,6 +24,7 @@
           "alfa": "darkred"
         }
         badge.style.cssText = `background: linear-gradient(${color[`${team}`]} 60%, white 40%)`
+        badge2.style.cssText = `background: linear-gradient(${color[`${team}`]} 60%, white 40%)`
       }
       function timeFunction(lockTime){
         console.log(lockTime)
@@ -46,10 +48,29 @@
             }, 1000);
       }
 
+      var menuVis = false;
+
       function displayMenu(){
         let overlay = document.getElementById('side-menu-underlay')
         overlay.style.display = 'block'
+        menuVis = true;
       }
+
+      function exitMenu(){
+        let overlay = document.getElementById('side-menu-underlay')
+        overlay.style.display = 'none'
+        menuVis = false;
+      }
+
+      addEventListener("click", (e) => {
+        let target = e.target
+        if (menuVis && target.id == 'side-menu-underlay'){
+          let overlay = document.getElementById('side-menu-underlay')
+          overlay.style.display = 'none'
+          menuVis = false;
+        }
+      })
+
     </script>
 </head>
 <% if (isAuth) { %>
@@ -61,6 +82,7 @@
     <div class="side-menu">
       <div class="menu-bar">
         <h1 class="menu-logo">Race Gambit</h1>
+        <i class="fa-solid fa-circle-xmark fa-lg" style="color: #ffadad" onclick="exitMenu();"></i>
       </div>
       <% if (!isAuth) { %>
         <form action="/login" class="form-width">
@@ -70,7 +92,42 @@
           <button type="submit" class="register side-menu-button">REGISTER</button>
         </form>
       <% } else if (isAuth) { %>
-
+        <div class="side-user-info" id="badge2" style='background: linear-gradient( white 60%, white 40%);'>
+          <div class="badge-words badge-section">
+            <p style="font-size: 24px; font-weight: bold;"><%- user[0].FirstName %> <%- user[0].LastName %></p>
+            <p style="font-weight: bold;"><%- user[0].Job %></p>
+            <p style="font-size: 15px;">Balance: $<%- user[0].Balance %> </p>
+            <p style="font-size: 12px;">Birth: <%- user[0].Birth  %> </p>
+          </div>
+          <div class="badge-section">
+            <img src="/images/<%- user[0].Team  %>.jpeg" alt="redbulll logo" width="160px" height="85px">
+          </div>
+        </div>
+        <div class="menu-items">
+          <div class="menu-item" onclick="location.href='/bets/Placement';">
+            <p href="">PLACEMENT</p>
+            <i class="fa-solid fa-flag-checkered"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/Qualification';">
+            <p href="">QUALIFICATION</p>
+            <i class="fa-solid fa-stopwatch"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/5050';">
+            <p href="">YES/NO</p>
+            <i class="fa-solid fa-dice"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/Pitstops';">
+            <p href="">PIT STOPS</p>
+            <i class="fa-solid fa-gears"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/leagues';">
+            <p href="">MY LEAGUES</p>
+            <i class="fa-solid fa-user-group"></i>
+          </div>
+        </div>
+        <form action="/logout" class="form-width" method="post">
+          <button type="submit" class="register side-menu-button">SIGN OUT</button>
+        </form>
       <% } %>
     </div>
   </div>
@@ -154,7 +211,6 @@
             <div class="date-box">
               <h2><%- matterRace.nextRace.date %> </h2>
             </div>
-            
           </div>
         </div>
       </div>

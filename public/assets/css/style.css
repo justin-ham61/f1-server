@@ -302,19 +302,66 @@ cursor: pointer;
   cursor: pointer;
 }
 
+.side-user-info{
+  width: 90%;
+  height: 300px;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(88, 88, 88);
+  display: grid;
+  grid-template-rows:1fr 1fr;
+  align-items: center;
+  align-content: space-evenly;
+  justify-items: center;
+
+}
+
 .menu-bar{
-  height: 75px;
+  height: 100px;
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   background-color: rgb(255, 17, 0);
+  gap: 100px;
+}
+
+.badge-section{
+  padding: -50px
 }
 
 .menu-logo{
   font-family: 'Caveat', cursive;
   color: white;
-  margin: 0px 
+  margin: 0px;
+  margin-left: 20px;
+}
+
+.menu-items {
+  width: 100%;
+  border-bottom: solid;
+  border-color: rgb(146, 146, 146);
+  border-width: 1px;
+}
+.menu-item{
+  height: 50px;
+  width: 100%;
+  border-top: solid;
+  border-color: rgb(146, 146, 146);
+  border-width: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: .3s;
+}
+
+.menu-item:hover{
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.menu-item > p {
+  margin-left: 20px;
 }
 
 .large-tabs {
@@ -400,16 +447,21 @@ cursor: pointer;
   .container{
     width: 100%;
   }
+  .landing-page-body{
+    display: none;
+  }
 }
 
 @media screen and (min-width: 1000px) {
   .container{
     width: 50%;
   }
+  .landing-page-body{
+    display: flex;
+  }
 }
 .landing-page-body {
   margin: 30px 0px;
-  display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;

@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
+
     <title>Qualification Bets</title>
     <script>
         function getBetStats(bet_id, betCategory){
@@ -23,9 +25,73 @@
                 console.info(err + " url" + url);
             });
         }
+        var menuVis = false;
+
+      function displayMenu(){
+        let overlay = document.getElementById('side-menu-underlay')
+        overlay.style.display = 'block'
+        menuVis = true;
+      }
+
+      function exitMenu(){
+        let overlay = document.getElementById('side-menu-underlay')
+        overlay.style.display = 'none'
+        menuVis = false;
+      }
+
+      addEventListener("click", (e) => {
+        let target = e.target
+        if (menuVis && target.id == 'side-menu-underlay'){
+          let overlay = document.getElementById('side-menu-underlay')
+          overlay.style.display = 'none'
+          menuVis = false;
+        }
+      })
     </script>
 </head>
 <body>
+  <div id="side-menu-underlay">
+    <div class="side-menu">
+      <div class="menu-bar">
+        <h1 class="menu-logo" onclick="location.href='/'">Race Gambit</h1>
+        <i class="fa-solid fa-circle-xmark fa-lg" style="color: #ffadad" onclick="exitMenu();"></i>
+      </div>
+      <% if (!isAuth) { %>
+        <form action="/login" class="form-width">
+          <button type="submit" class="sign-in side-menu-button">SIGN IN</button>
+        </form>
+        <form action="/registration" class="form-width">
+          <button type="submit" class="register side-menu-button">REGISTER</button>
+        </form>
+      <% } else if (isAuth) { %>
+        <div class="menu-items">
+          <div class="menu-item" onclick="location.href='/bets/Placement';">
+            <p href="">PLACEMENT</p>
+            <i class="fa-solid fa-flag-checkered"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/Qualification';">
+            <p href="">QUALIFICATION</p>
+            <i class="fa-solid fa-stopwatch"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/5050';">
+            <p href="">YES/NO</p>
+            <i class="fa-solid fa-dice"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/bets/Pitstops';">
+            <p href="">PIT STOPS</p>
+            <i class="fa-solid fa-gears"></i>
+          </div>
+          <div class="menu-item" onclick="location.href='/leagues';">
+            <p href="">MY LEAGUES</p>
+            <i class="fa-solid fa-user-group"></i>
+          </div>
+        </div>
+        <form action="/logout" class="form-width" method="post">
+          <button type="submit" class="register side-menu-button">SIGN OUT</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
   <div class="header-box">
     <div class="left-header">
       <a class="header-logo" href="/">F1 Bets</a>
@@ -52,12 +118,20 @@
       <% } %> 
   </div>
   <div class="tabs-bar">
-    <div class="tabs">
+    <div class="large-tabs">
       <a class='tab-head' id='popular' href="/bets/Placement"> PLACEMENT </a> 
       <a class='tab-head' id='trending' href="/bets/Qualification" > QUALIFICATION </a>
       <a class='tab-head' id='new' href="/bets/5050"> YES/NO </a>
       <a class="tab-head" id="pitstop" href="/bets/Pitstops">PIT STOPS</a>
       <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
+    </div>
+    <div class="small-tabs-bar">
+      <div class="small-tabs-button">
+        <i class="fa-solid fa fa-bars fa-xl" onclick="displayMenu();"></i>
+      </div>
+      <div class="small-logo">
+        <p onclick="location.href='/'">RG</p>
+      </div>
     </div>
   </div>
   <div class="bet-box">
