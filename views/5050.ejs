@@ -23,7 +23,7 @@
     <% } %> 
 
     <table class="center bet-table">
-        <tr class="table-head">
+        <tr class="table-head"  id="table-head">
             <th style="width: 5%;">No.</th>
             <th style="width: 30%;">Bet Name</th>
             <th style="width: 15%;">Bet Category</th>
@@ -33,13 +33,13 @@
         </tr>
         <% for (let i = 0; i < bets.length; i++) { %> 
             <tr class="table-row">
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- i + 1 %> </td>
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].BetName %> </td>
-                <td onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].Category %> </td>
+                <td data-label="No." onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- i + 1 %> </td>
+                <td data-label="Bet Name" onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].BetName %> </td>
+                <td data-label="Bet Category" onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].Category %> </td>
                 <% if (placedBets.indexOf(bets[i].bet_id) < 0) { %> 
                 <form action="/Bets/PlaceBet/<%- bets[i].bet_id%>/<%- bets[i].Category %>" method="POST">
-                <td><input id="betAmount" name="betAmount" type="number" placeholder="amount" required></td>
-                <td><select id="driver" name="driver" class="bet-selection" required>
+                <td data-label="Bet Amount"><input id="betAmount" name="betAmount" type="number" placeholder="amount" required></td>
+                <td data-label="Bet Choice" ><select id="driver" name="driver" class="bet-selection" required>
                     <option value="" disabled selected hidden>Select Option</option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
@@ -47,9 +47,9 @@
                 <td><button class="bet-btn" type="submit"">Bet</button></td>
                 </form>
                 <% } else { %> 
-                <td>$<%- result[placedBets.indexOf(bets[i].bet_id)].BetAmount %></td>
-                <td><%- result[placedBets.indexOf(bets[i].bet_id)].BetChoice%></td>
-                <td>Placed</td>
+                <td data-label="Bet Amount" >$<%- result[placedBets.indexOf(bets[i].bet_id)].BetAmount %></td>
+                <td data-label="Bet Choice"><%- result[placedBets.indexOf(bets[i].bet_id)].BetChoice%></td>
+                <td>Bet Already Placed</td>
                 <% } %> 
             </tr>
         <% } %> 

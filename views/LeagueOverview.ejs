@@ -8,15 +8,20 @@
     <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
     <title>League Overview</title>
     <%- include('partials/head') %>
+    <script>
+        function getUserBets(user_id){
+        window.location.href = `https://racegambit.com/UserInfo/${user_id}`;
+      }
+    </script>
 </head>
 <body>
-    <%- include('partials/body_layout') %>
+    <%- include('partials/header_layout') %>
     <div>
         <h1 style="text-align: center;"><%- leagueName %></h1>
     </div>
     <div>
-        <table class="center league-user-table">
-            <tr class="table-head">
+        <table class="center bet-table">
+            <tr class="table-head" id="table-head">
                 <th style="width: 5%;">Placement</th>
                 <th style="width: 20%;">First Name</th>
                 <th style="width: 20%;">Last Name</th>
@@ -26,11 +31,11 @@
             <% if (name.length > 0) { %>
                 <% for (let i = 0; i < name.length; i++) { %>
                     <tr class="table-row" onclick="getUserBets(`<%- name[i].user_id %>`);">
-                        <td><%- i + 1 %> </td>
-                        <td><%- name[i].FirstName %> </td>
-                        <td><%- name[i].LastName %> </td>
-                        <td><%- name[i].Job %> </td>
-                        <td>$<%- name[i].Balance %> </td>
+                        <td data-label="No."><%- i + 1 %> </td>
+                        <td data-label="First Name"><%- name[i].FirstName %> </td>
+                        <td data-label="Last Name"><%- name[i].LastName %> </td>
+                        <td data-label="Occupation"><%- name[i].Job %> </td>
+                        <td data-label="Balance">$<%- name[i].Balance %> </td>
                     </tr>
                 <% } %> 
             <% } %> 
