@@ -358,6 +358,10 @@ cursor: pointer;
   margin-left: 20px;
 }
 
+.fa-circle-xmark:hover{
+  cursor: pointer;
+}
+
 .menu-items {
   width: 100%;
   border-bottom: solid;

@@ -6,47 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Home</title>
+    <title>Race Gambit</title>
+    <%- include('partials/head') %>
     <script>
-              var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
-        function preventDefault(e) {
-            e.preventDefault();
-        }
-
-        function preventDefaultForScrollKeys(e) {
-            if (keys[e.keyCode]) {
-            preventDefault(e);
-            return false;
-            }
-        }
-
-        // modern Chrome requires { passive: false } when adding event
-        var supportsPassive = false;
-        try {
-            window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
-            get: function () { supportsPassive = true; } 
-            }));
-        } catch(e) {}
-
-        var wheelOpt = supportsPassive ? { passive: false } : false;
-        var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
-
-        // call this to Disable
-        function disableScroll() {
-            window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
-            window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
-            window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
-            window.addEventListener('keydown', preventDefaultForScrollKeys, false);
-        }
-
-        // call this to Enable
-        function enableScroll() {
-            window.removeEventListener('DOMMouseScroll', preventDefault, false);
-            window.removeEventListener(wheelEvent, preventDefault, wheelOpt); 
-            window.removeEventListener('touchmove', preventDefault, wheelOpt);
-            window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
-        }
       function getIdColor(team){
         const badge = document.getElementById('badge')
         const badge2 = document.getElementById('badge2')
@@ -86,33 +48,6 @@
             document.getElementById("second").innerHTML = seconds
             }, 1000);
       }
-
-      var menuVis = false;
-
-      function displayMenu(){
-        let overlay = document.getElementById('side-menu-underlay')
-        overlay.style.display = 'block'
-        menuVis = true;
-        disableScroll();
-      }
-
-      function exitMenu(){
-        let overlay = document.getElementById('side-menu-underlay')
-        overlay.style.display = 'none'
-        menuVis = false;
-        enableScroll();
-      }
-
-      addEventListener("click", (e) => {
-        let target = e.target
-        if (menuVis && target.id == 'side-menu-underlay'){
-          let overlay = document.getElementById('side-menu-underlay')
-          overlay.style.display = 'none'
-          menuVis = false;
-          enableScroll();
-        }
-      })
-
     </script>
 </head>
 <% if (isAuth) { %>
@@ -175,7 +110,7 @@
   </div>
   <div class="header-box">
     <div class="left-header">
-      <a class="header-logo" href="/">F1 Bets</a>
+      <a class="header-logo" href="/">Race Gambit</a>
     </div>
     <% if (!isAuth) { %> 
       <div class="right-header">
