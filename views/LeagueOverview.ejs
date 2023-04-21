@@ -24,9 +24,9 @@
         <div class="mobile-only">
             <label for="betSearch">Search User:</label>
             <select id="betSearch" onchange="scrollToBet();">
-              <option value="" selected disabled>Select Bet</option>
+              <option value="" selected disabled>Select User</option>
               <% for (let i = 0; i < name.length; i++) { %>
-                <option value="bet-row-<%- i %>"><%- name[i].FirstName %> " " <%- name[i].LastName %></option>
+                <option value="bet-row-<%- i %>"><%- name[i].FirstName %> <%- name[i].LastName %></option>
               <% } %>
             </select>
         </div>

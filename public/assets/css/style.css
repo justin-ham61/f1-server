@@ -800,8 +800,10 @@ table.center {
   .mobile-only {
     display: block;
     margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  
+
   .bet-table {
     font-size: 14px;
     width: 90%;
