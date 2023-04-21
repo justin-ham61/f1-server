@@ -9,7 +9,7 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const flash = require('connect-flash');
 const schedule = require('node-schedule');
-var { lockTime, matterRace } = require('./public/constants/const.js')
+var { lockTime, matterRace, races } = require('./public/constants/const.js')
 const { config } = require('./public/constants/keys.js')
 
 const payDay1 = schedule.scheduleJob("1 1 * * 5", payDay)
@@ -279,10 +279,12 @@ app.post('/logout', (req,res) => {
 })
 
 
-
 app.listen(8080, () => {
     console.log("server is running on port 8000");
+    updateRaceDate();
 })
+
+
 
 const leagueRouter = require('./routes/Leagues.js');
 const userRouter = require('./routes/UserAuth.js');
@@ -389,4 +391,36 @@ function getUserData(user_id){
             }
         )
     })
+}
+
+async function updateRaceDate(){
+    const time = new Date(new Date().toISOString().split('T')[0]) //calls today's date
+
+    for (let i = 0; i < races.length; i++){
+
+        let fullDate = new Date(races[i].date + 'T' + races[i].time); //formats the racedate to have day and the time
+
+        let qualiFullDate = new Date(races[i].Qualifying.date + 'T' + races[i].Qualifying.time) //formats the qualidate to have the day and the time
+
+        if (time < fullDate){
+
+            console.log('Race will happen in the future at Round: ' + (i + 1))
+            raceDate = fullDate;
+            qualiDate = qualiFullDate;
+            roundNumber = i + 1
+            lockTime.time = qualiDate;
+            lockTime.category = "Qualification"
+            console.log(raceDate, qualiDate, roundNumber, lockTime)
+            //i have the location of the next race, previous race location is just i - 1
+            matterRace.nextRace.round = roundNumber;
+            matterRace.nextRace.date = races[i].date;
+            matterRace.nextRace.name = races[i].raceName;
+            matterRace.nextRace.race = races[i].Circuit.circuitId
+            matterRace.previousRace.round = roundNumber - 1;
+            matterRace.previousRace.date = races[i-1].date;
+            matterRace.previousRace.name = races[i-1].raceName;
+            matterRace.previousRace.race = races[i-1].Circuit.circuitId
+            break;
+        }
+    }
 }
