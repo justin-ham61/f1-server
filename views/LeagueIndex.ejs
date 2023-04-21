@@ -77,7 +77,7 @@
   <%- include('partials/header_layout') %>
   <div class="league-bar">
     <form action="/LeagueCreateForm" method="GET">
-        <button class="league-btn">Create League</button>
+        <button class="league-btn" id="create-league-btn">Create League</button>
     </form>
     <input type="text" name="leagueSearch" id="leagueSearch" placeholder="League Name" onsubmit="joinLeague()">
     <button class="league-btn" type="button" onclick="joinLeague()">Search Leagues</button>
