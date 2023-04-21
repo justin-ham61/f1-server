@@ -1,0 +1,11 @@
+<head>
+    <script>
+        function scrollToBet() {
+            const betId = document.getElementById("betSearch").value;
+            if (betId) {
+                const betRow = document.getElementById(betId);
+                betRow.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    </script>
+</head>

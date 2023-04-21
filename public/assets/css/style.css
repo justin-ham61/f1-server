@@ -792,7 +792,16 @@ table.center {
   background-color: #34495e;
 }
 
+.mobile-only {
+  display: none;
+}
+
 @media screen and (max-width: 1000px) {
+  .mobile-only {
+    display: block;
+    margin-bottom: 20px;
+  }
+  
   .bet-table {
     font-size: 14px;
     width: 90%;

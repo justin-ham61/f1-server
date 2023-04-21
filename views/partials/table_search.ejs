@@ -1,0 +1,10 @@
+<div class="mobile-only">
+    <label for="betSearch">Search Bet:</label>
+    <select id="betSearch" onchange="scrollToBet();">
+      <option value="" selected disabled>Select Bet</option>
+      <% for (let i = 0; i < bets.length; i++) { %>
+        <option value="bet-row-<%- i %>"><%- bets[i].BetName %></option>
+      <% } %>
+    </select>
+  </div>
+  

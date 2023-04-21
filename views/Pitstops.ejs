@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
     <title>Pit Stop Bets</title>
     <%- include('partials/head') %>
+    <%- include('partials/table_search_js') %>
 </head>
 <body>
   <%- include('partials/header_layout') %>
@@ -21,6 +22,8 @@
     <% if(successMessage){ %> 
       <div class="success-message"><%= successMessage %></div>
     <% } %> 
+    
+    <%- include('partials/table_search') %>
 
     <table class="center bet-table">
         <tr class="table-head" id="table-head">
@@ -32,7 +35,7 @@
             <th></th>
         </tr>
         <% for (let i = 0; i < bets.length; i++) { %> 
-            <tr class="table-row">
+          <tr class="table-row bet-row" id="bet-row-<%- i %>">
                 <td data-label="No." onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- i + 1 %> </td>
                 <td data-label="Bet Name" onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].BetName %> </td>
                 <td data-label="Bet Category" onclick="getBetStats(`<%- bets[i].bet_id %>`, `<%- bets[i].Category %>`);"><%- bets[i].Category %> </td>
