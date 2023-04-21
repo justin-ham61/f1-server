@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/212b4b3f17.js" crossorigin="anonymous"></script>
     <title>League Overview</title>
     <%- include('partials/head') %>
+    <%- include('partials/table_search_js') %>
     <script>
         function getUserBets(user_id){
         window.location.href = `https://racegambit.com/UserInfo/${user_id}`;
@@ -20,6 +21,15 @@
         <h1 style="text-align: center;"><%- leagueName %></h1>
     </div>
     <div>
+        <div class="mobile-only">
+            <label for="betSearch">Search User:</label>
+            <select id="betSearch" onchange="scrollToBet();">
+              <option value="" selected disabled>Select Bet</option>
+              <% for (let i = 0; i < bets.length; i++) { %>
+                <option value="bet-row-<%- i %>"><%- name[i].FirstName %> " " <%- name[i].LastName %></option>
+              <% } %>
+            </select>
+        </div>
         <table class="center bet-table">
             <tr class="table-head" id="table-head">
                 <th style="width: 5%;">Placement</th>
@@ -30,7 +40,7 @@
             </tr>
             <% if (name.length > 0) { %>
                 <% for (let i = 0; i < name.length; i++) { %>
-                    <tr class="table-row" onclick="getUserBets(`<%- name[i].user_id %>`);">
+                    <tr class="table-row bet-row" id="bet-row-<%- i %>" onclick="getUserBets(`<%- name[i].user_id %>`);">
                         <td data-label="No."><%- i + 1 %> </td>
                         <td data-label="First Name"><%- name[i].FirstName %> </td>
                         <td data-label="Last Name"><%- name[i].LastName %> </td>
