@@ -15,20 +15,20 @@
     <% if (betCategory == "none") { %> 
       <div style="font-size: 25px; margin-top: 10px;" >No Bet Has Been Made</div>
     <% } %> 
-    <table class="center bet-info-table" style="margin-top: 20px;">
-        <tr class="table-head">
+    <table class="center bet-table" style="margin-top: 20px;">
+        <tr class="table-head" id="table-head">
             <th>Driver Name</th>
             <th>% of Bets</th>
-            <th>Bet Amount</th>
+            <th>Total Bet Amount</th>
             <th>% of Pool</th>
         </tr>
         <% if (betCategory == "drivers") { %> 
           <% for (let key in drivers) { %> 
             <tr class="table-row">
-                <td><%- key %> </td>
-                <td><meter class="percent-bar" min="0" max="1" value='<%= (drivers[key]/totalBets)%>'> <%- ((drivers[key]/totalBets) * 100).toFixed(3) %> </meter> <%- ((drivers[key]/totalBets) * 100).toFixed(2) %>% </td>
-                <td>$<%- amount[key] %> </td>
-                <td><meter class="percent-bar" min="0" max="1" value='<%= (amount[key]/betAmount)%>'> <%- ((amount[key]/betAmount) * 100).toFixed(2) %> </meter> <%- ((amount[key]/betAmount) * 100).toFixed(2) %> % </td>
+                <td data-label="Driver Name"><%- key %> </td>
+                <td data-label="% of Bets"><meter class="percent-bar" min="0" max="1" value='<%= (drivers[key]/totalBets)%>'> <%- ((drivers[key]/totalBets) * 100).toFixed(3) %> </meter> <%- ((drivers[key]/totalBets) * 100).toFixed(2) %>% </td>
+                <td data-label="Total Bet Amount">$<%- amount[key] %> </td>
+                <td data-label="% of Bet Pool"><meter class="percent-bar" min="0" max="1" value='<%= (amount[key]/betAmount)%>'> <%- ((amount[key]/betAmount) * 100).toFixed(2) %> </meter> <%- ((amount[key]/betAmount) * 100).toFixed(2) %> % </td>
             </tr>
           <% } %> 
         <% } else if (betCategory == "yesno") { %>

@@ -6,49 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../assets/css/style.css">
     <title>UserInfo</title>
-    
+    <%- include('partials/head') %>
 </head>
 <body>
-  <div class="header-box">
-    <div class="left-header">
-      <a class="header-logo" href="/">Race Gambit</a>
-    </div>
-    <% if (!isAuth) { %> 
-        <div class="right-header">
-          <form action="/login">
-            <button class="sign-in header-btn" type="submit">SIGN IN</button>
-          </form> 
-          <form action="/registration">
-            <button class="register header-btn" type="submit">REGISTER</button>
-          </form>
-        </div>
-      <% } %>
-      <% if (isAuth) { %> 
-        <div class="right-header">
-          <form action="/account" method="GET">
-            <button class="sign-in header-btn" type="submit">ACCOUNT</button>
-          </form>
-          <form action="/logout" method="POST">
-            <button class="register header-btn" type="submit">SIGN OUT</button>
-          </form> 
-        </div>
-      <% } %> 
-  </div>
-  <div class="tabs-bar">
-    <div class="tabs">
-      <a class='tab-head' id='popular' href="/bets/Placement"> PLACEMENT </a> 
-      <a class='tab-head' id='trending' href="/bets/Qualification" > QUALIFICATION </a>
-      <a class='tab-head' id='new' href="/bets/5050"> YES/NO </a>
-      <a class="tab-head" id="pitstop" href="/bets/Pitstops">PIT STOPS</a>
-      <a class="tab-head" id='create' href="/leagues"> MY LEAGUE </a>
-    </div>
-  </div>
+  <%- include('partials/header_layout') %>
   <div class="bet-box">
     <h1><%- user[0].FirstName %> <%- user[0].LastName %> </h1>
     <h2>Account Balance: $<%- user[0].Balance  %> </h2>
   
     <table class="center bet-table">
-        <tr class="table-head">
+        <tr class="table-head" id="table-head">
             <th style="width: 5%;">No.</th>
             <th style="width: 30%;">Bet Name</th>
             <td>Bet Amount</td>
@@ -57,10 +24,10 @@
         <% if (bets.length > 0) { %> 
           <% for (let i = 0; i < bets.length; i++) { %> 
             <tr class="table-row">
-              <th><%- i + 1 %></th>
-              <th><%- bets[i].BetName %> </th>
-              <th>$<%- bets[i].BetAmount %></th>
-              <th><%- bets[i].BetChoice %></th>
+              <td data-label="No."><%- i + 1 %></th>
+              <td data-label="Bet Name"><%- bets[i].BetName %> </th>
+              <td data-label="Bet Amount">$<%- bets[i].BetAmount %></th>
+              <td data-label="Bet Choice"><%- bets[i].BetChoice %></th>
             </tr>
           <% } %> 
         <% } %> 
