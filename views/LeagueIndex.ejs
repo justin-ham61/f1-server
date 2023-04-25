@@ -74,6 +74,12 @@
     </script>
 </head>
 <body>
+  <div id="league-overlay">
+    <div class="league-password">
+      <input type="text" placeholder="League Password" id="league-password">
+      <button type="button" onclick="leaguePass()">Join League</button>
+    </div>
+  </div>
   <%- include('partials/header_layout') %>
   <div class="league-bar">
     <form action="/LeagueCreateForm" method="GET">
