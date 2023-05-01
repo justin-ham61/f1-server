@@ -14,3 +14,10 @@ A web-based app for sports betting on the Formula 1 Championship
 <img src="/public/images/readme/loginhome.png" alt="Registeration Page" width="500" height="auto">
 <img src="/public/images/readme/mobilehome.png" alt="Mobile Home" width="200" height="auto">
 <img src="/public/images/readme/mobilemenu.png" alt="Mobile Menu" width="200" height="auto">
+
+4. Betting page where users can place their bets before a race weekend
+<img src="/public/images/readme/betting.png" alt="Registeration Page" width="500" height="auto">
+<img src="/public/images/readme/bettingmobile.png" alt="Registeration Page" width="200" height="auto">
+
+5. League page 
+<img src="/public/images/readme/league.png" alt="Registeration Page" width="500" height="auto">
