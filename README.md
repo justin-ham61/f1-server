@@ -1,6 +1,6 @@
 # Race Gambit
 
-A web-based app for sports betting on the Formula 1 Championship
+A web-based app for sports betting on the Formula 1 Championship.
 
 # Instructions/Features
 
@@ -21,3 +21,4 @@ A web-based app for sports betting on the Formula 1 Championship
 
 5. League page 
 <img src="/public/images/readme/league.png" alt="Registeration Page" width="500" height="auto">
+
