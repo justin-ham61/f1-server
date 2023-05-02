@@ -1,10 +1,11 @@
 # Race Gambit
 
-A web-based app for sports betting on the Formula 1 Championship.
+A web-based app for sports betting on the Formula 1 Championship. 
 
 # Sign-in Information for Guests
 1. Email: racegambittest@gmail.com
-   Password: 12341234
+
+Password: 12341234
 
 # Instructions/Features
 

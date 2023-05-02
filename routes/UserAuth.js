@@ -90,8 +90,17 @@ router.get('/VerifyEmail/:crypt', async (req, res) => {
     }
 })
 
-router.post('/loginUser', async (req, res) => {
-    let {email, password} = req.body;
+router.post('/loginUser/:guest', async (req, res) => {
+    let guest = req.params.guest;
+    let email;
+    let password;
+    if (guest == 'guest'){
+        email = 'racegambittest@gmail.com'
+        password = '12341234'
+    } else {
+        email = req.body.email;
+        password = req.body.password;
+    }
     let err = {email: 0, verification: 0}
     let userData = await checkEmail(email);
     if (userData[0].user_id === 1){
